@@ -1,0 +1,18 @@
+# Unifica las identidades del equipo en el historial.
+#
+# Durante el desarrollo se trabajo en sesiones conjuntas sobre un mismo
+# equipo, cambiando la cuenta configurada en Git segun quien estuviera
+# escribiendo. Eso hizo que una misma persona quedara registrada con
+# varios nombres, aunque siempre con el mismo correo.
+#
+# Este archivo no modifica los commits: solo indica a git shortlog, git log
+# y git blame que esas etiquetas corresponden al mismo integrante.
+#
+#   Formato:  Nombre correcto <correo correcto> Nombre viejo <correo viejo>
+
+Mateo Hidalgo <hidalgomateo45@gmail.com> Hidalgo45 <hidalgomateo45@gmail.com>
+
+Isaac Carrion <iacarrion@puce.edu.ec> iacarrion <iacarrion@puce.edu.ec>
+
+Valeria Tobar <vt2357303@gmail.com> astro-nauta1 <vt2357303@gmail.com>
+Valeria Tobar <vt2357303@gmail.com> VALERI_TOBAR <vt2357303@gmail.com>
