@@ -4,19 +4,54 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 
-from flask import (Blueprint, flash, redirect, render_template, request,
-                   session, url_for)
+from flask import (Blueprint, current_app, flash, redirect, render_template,
+                   request, session, url_for)
 
 from . import requiere_sesion
+from ..config import Config
 from ..dominio import (FabricaHabitaciones, ReglaNegocioError, Reserva,
                        ValorInvalidoError)
 from ..dominio.excepciones import ErrorDominio
 from ..repositorios import HabitacionRepositorioPG, ReservaRepositorioPG
+from ..servicios import ErrorCorreo, servicio_correo
 
 bp = Blueprint("publico", __name__)
 
 habitaciones_repo = HabitacionRepositorioPG()
 reservas_repo = ReservaRepositorioPG()
+
+
+def _enviar_comprobante(codigo: str) -> tuple[bool, str]:
+    """Arma el comprobante de una reserva y lo entrega por correo.
+
+    Devuelve (exito, detalle). Nunca deja escapar la excepcion: el correo es
+    un aviso posterior a la reserva, y una falla de red no puede dejar al
+    cliente creyendo que su reserva no quedo registrada.
+    """
+    reserva = reservas_repo.buscar_por_codigo(codigo)
+    if not reserva:
+        return False, f"No existe la reserva {codigo}."
+
+    total = Decimal(reserva["total"]) + Decimal(reserva["servicios"])
+    contexto = {
+        "r": reserva,
+        "habitaciones": reservas_repo.habitaciones_de(reserva["id_reserva"]),
+        "servicios": reservas_repo.servicios_de(reserva["id_reserva"]),
+        "total": total,
+        "saldo": total - Decimal(reserva["pagado"]),
+    }
+
+    try:
+        detalle = servicio_correo(Config).enviar_comprobante(
+            reserva,
+            render_template("correo/comprobante.html", **contexto),
+            render_template("correo/comprobante.txt", **contexto),
+        )
+        current_app.logger.info("Comprobante %s: %s", codigo, detalle)
+        return True, detalle
+    except ErrorCorreo as e:
+        current_app.logger.warning("Comprobante %s no entregado: %s", codigo, e)
+        return False, str(e)
 
 
 def _leer_fechas() -> tuple[date, date, int]:
@@ -150,6 +185,17 @@ def reservar():
 
         flash(f"Reserva {codigo} creada. Te esperamos el "
               f"{checkin.strftime('%d/%m/%Y')}.", "success")
+
+        # El comprobante se envia despues de que la reserva ya esta guardada.
+        # Si el correo falla, se avisa pero la reserva se mantiene.
+        enviado, detalle = _enviar_comprobante(codigo)
+        if enviado:
+            flash(f"Te enviamos el comprobante a {usuario['email']}.", "info")
+        else:
+            flash(f"Tu reserva esta confirmada, pero no pudimos enviarte el "
+                  f"comprobante por correo ({detalle}). Guarda el codigo "
+                  f"{codigo} o pide que te lo reenviemos.", "warning")
+
         return redirect(url_for("publico.confirmacion", codigo=codigo))
 
     except ErrorDominio as e:
@@ -157,6 +203,31 @@ def reservar():
         return redirect(url_for("publico.detalle", id_habitacion=id_habitacion,
                                 checkin=checkin, checkout=checkout,
                                 huespedes=adultos + ninos))
+
+
+@bp.route("/reservas/<codigo>/comprobante", methods=["POST"])
+@requiere_sesion
+def reenviar_comprobante(codigo: str):
+    """Vuelve a enviar el comprobante de una reserva ya existente."""
+    reserva = reservas_repo.buscar_por_codigo(codigo)
+    if not reserva:
+        flash(f"No encontramos ninguna reserva con el codigo {codigo}.",
+              "warning")
+        return redirect(url_for("publico.home"))
+
+    usuario = session["usuario"]
+    if usuario["rol"] == "CLIENTE" and reserva["id_cliente"] != usuario["id"]:
+        flash("Solo puedes pedir el comprobante de tus propias reservas.",
+              "danger")
+        return redirect(url_for("cuenta.mis_reservas"))
+
+    enviado, detalle = _enviar_comprobante(codigo)
+    if enviado:
+        flash(f"Comprobante reenviado a {reserva['email']}.", "success")
+    else:
+        flash(f"No pudimos reenviar el comprobante: {detalle}", "danger")
+
+    return redirect(url_for("publico.confirmacion", codigo=codigo))
 
 
 @bp.route("/reservas/<codigo>")
