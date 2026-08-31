@@ -34,6 +34,16 @@ Nombrar los archivos con un ancho que no corresponde al de la imagen sería decl
 - [x] Los mensajes de error se ven completos
 - [ ] Capturas de página completa incluyendo la barra de navegación *(pendiente en las de móvil)*
 
+## Mejoras aplicadas tras revisar las capturas
+
+### Barra de navegación con dos enlaces llamados igual
+
+**Hallazgo.** En `01_home_escritorio.png` se ve que, con sesión de personal iniciada, la barra mostraba: *Habitaciones · Tablero · Reservas · Habitaciones · Reportes*. El mismo texto llevaba a dos sitios distintos: el catálogo público y la gestión interna. Además, la pantalla de destino del segundo ya se titulaba «Inventario de habitaciones», así que la barra contradecía a la propia página.
+
+**Cambio.** El enlace de gestión pasa a llamarse **Inventario**, que coincide con el título de su pantalla, y se agrega un separador visual entre el catálogo público y el bloque de gestión.
+
+**Dónde.** `app/templates/base.html` y `app/static/css/aurora.css`.
+
 ## Pendientes
 
 1. **Rehacer `04_error_capacidad_movil.png`**: fue tomada con una versión antigua de la hoja de estilos en caché, por lo que el botón «Confirmar reserva» aparece en azul de Bootstrap y no en el color de la marca. El código actual es correcto; solo hay que recapturar forzando la recarga con `Ctrl + Shift + R`.
