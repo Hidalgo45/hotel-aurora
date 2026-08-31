@@ -101,6 +101,16 @@
         <button class="btn btn-outline-primary" onclick="window.print()">
           Imprimir comprobante
         </button>
+
+        {% if usuario_actual %}
+        <form method="post" class="d-inline"
+              action="{{ url_for('publico.reenviar_comprobante', codigo=r.codigo) }}">
+          <button type="submit" class="btn btn-outline-primary">
+            Enviar comprobante a {{ r.email }}
+          </button>
+        </form>
+        {% endif %}
+
         <a class="btn btn-outline-primary" href="{{ url_for('publico.catalogo') }}">
           Reservar otra habitacion
         </a>

@@ -19,3 +19,6 @@ respaldos/
 Thumbs.db
 .vscode/
 .idea/
+
+# Comprobantes generados en modo archivo
+correos_enviados/
