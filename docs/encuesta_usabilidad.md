@@ -37,6 +37,37 @@ El participante trabaja solo. El observador **no ayuda**: solo anota. Si la pers
 
 ---
 
+## Cómo crear el formulario en Google Forms
+
+En vez de copiar las 17 preguntas a mano, usa el script `crear_formulario_encuesta.gs` que está en esta misma carpeta:
+
+1. Entra a <https://script.google.com> con tu cuenta de Google
+2. **Nuevo proyecto**
+3. Borra lo que aparezca y pega el contenido completo del archivo `.gs`
+4. Guarda con `Ctrl + S` y presiona **Ejecutar**
+5. La primera vez Google pide permisos: *Revisar permisos* → tu cuenta → *Configuración avanzada* → *Ir a (nombre del proyecto)* → **Permitir**
+6. Abre **Ver → Registro de ejecución**. Ahí salen los dos enlaces: el de edición y el que se comparte con los participantes
+
+El formulario queda con tres secciones, barra de progreso y las diez afirmaciones del SUS en escala de 1 a 5, en el orden correcto.
+
+### Vincular la hoja de respuestas
+
+En el formulario, pestaña **Respuestas** → ícono verde de hoja de cálculo. Las respuestas caen ahí automáticamente.
+
+### Calcular el puntaje SUS
+
+Con el orden de preguntas que genera el script, las diez afirmaciones quedan en las columnas **E** a **N**. En la columna **S** de la primera fila de respuestas, pega esta fórmula y arrástrala hacia abajo:
+
+```
+=((E2-1)+(5-F2)+(G2-1)+(5-H2)+(I2-1)+(5-J2)+(K2-1)+(5-L2)+(M2-1)+(5-N2))*2.5
+```
+
+El promedio del grupo sale con `=PROMEDIO(S2:S11)`.
+
+> Verifica que la columna E sea realmente la afirmación 1 antes de arrastrar. Si agregaste o quitaste alguna pregunta, las letras se corren.
+
+---
+
 ## Parte B — Cuestionario SUS adaptado
 
 Escala: **1 = muy en desacuerdo · 5 = muy de acuerdo**
