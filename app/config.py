@@ -25,6 +25,20 @@ class Config:
     HOTEL_CIUDAD = "Quito, Ecuador"
     HOTEL_TELEFONO = "(02) 299 1700"
 
+    # ---- Envio del comprobante de reserva por correo ----
+    # "archivo": guarda el mensaje en la carpeta correos_enviados en lugar de
+    #            enviarlo. Es el valor por defecto: la aplicacion funciona sin
+    #            conexion y el flujo se puede demostrar en la sustentacion.
+    # "smtp":    envia de verdad con los datos de abajo.
+    CORREO_BACKEND = os.getenv("CORREO_BACKEND", "archivo")
+    SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+    SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USUARIO = os.getenv("SMTP_USUARIO", "")
+    SMTP_CLAVE = os.getenv("SMTP_CLAVE", "")
+    SMTP_REMITENTE = os.getenv("SMTP_REMITENTE", "reservas@hotelaurora.ec")
+    SMTP_TIEMPO_LIMITE = int(os.getenv("SMTP_TIEMPO_LIMITE", "10"))
+    CARPETA_CORREOS = RAIZ / "correos_enviados"
+
     @classmethod
     def cadena_conexion(cls) -> str:
         return (f"host={cls.DB_HOST} port={cls.DB_PORT} dbname={cls.DB_NAME} "
