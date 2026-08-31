@@ -16,7 +16,7 @@
     <table class="table align-middle tabla-adaptable">
       <thead>
         <tr>
-          <th>Codigo</th><th>Fechas</th><th>Habitaciones</th>
+          <th>Código</th><th>Fechas</th><th>Habitaciones</th>
           <th>Estado</th><th class="text-end">Total</th><th></th>
         </tr>
       </thead>
@@ -47,8 +47,8 @@
             {% if r.estado in ['PENDIENTE', 'CONFIRMADA'] %}
             <form method="post"
                   action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
-                  data-confirmar="Se cancelara la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. Confirmas?">
-              <input type="hidden" name="motivo" value="Cancelada por el huesped">
+                  data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿¿Confirmas?">
+              <input type="hidden" name="motivo" value="Cancelada por el huésped">
               <button class="btn btn-sm btn-outline-danger">Cancelar</button>
             </form>
             {% endif %}
@@ -62,7 +62,7 @@
   <div class="alert alert-info" role="status">
     Todavia no tienes reservas.
     <a href="{{ url_for('publico.catalogo') }}" class="alert-link">
-      Busca una habitacion disponible
+      Busca una habitación disponible
     </a> para empezar.
   </div>
   {% endif %}

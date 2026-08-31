@@ -147,7 +147,7 @@ class HabitacionEstandar(Habitacion):
         return self._redondear(self._tarifa_base * noches * Decimal(factor_temporada))
 
     def servicios_incluidos(self):
-        return ["Wi-Fi", "TV por cable", "Bano privado"]
+        return ["Wi-Fi", "TV por cable", "Baño privado", "Parqueadero"]
 
     def capacidad(self):
         return 2
@@ -171,7 +171,8 @@ class HabitacionSuite(Habitacion):
         return self._redondear(subtotal)
 
     def servicios_incluidos(self):
-        return ["Wi-Fi", "TV por cable", "Desayuno buffet", "Minibar", "Jacuzzi"]
+        return ["Wi-Fi", "TV por cable", "Desayuno buffet", "Minibar",
+                "Jacuzzi", "Parqueadero"]
 
     def capacidad(self):
         return 3
@@ -199,7 +200,8 @@ class HabitacionFamiliar(Habitacion):
         return self._redondear(base + extras)
 
     def servicios_incluidos(self):
-        return ["Wi-Fi", "TV por cable", "Cuna a pedido", "Desayuno infantil"]
+        return ["Wi-Fi", "TV por cable", "Cuna a pedido", "Desayuno infantil",
+                "Parqueadero"]
 
     def capacidad(self):
         return 2 + self._camas_extra

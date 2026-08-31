@@ -3,25 +3,25 @@
 {{ hotel.nombre }} - COMPROBANTE DE RESERVA
 ==========================================
 
-Hola {{ r.cliente.split(' ')[0] }}, tu reserva quedo registrada.
+Hola {{ r.cliente.split(' ')[0] }}, tu reserva quedó registrada.
 
-CODIGO DE RESERVA: {{ r.codigo }}
+CÓDIGO DE RESERVA: {{ r.codigo }}
 
-DATOS DE LA ESTADIA
+DATOS DE LA ESTADÍA
 -------------------
-Huesped:   {{ r.cliente }}
+Huésped:   {{ r.cliente }}
 Documento: {{ r.cedula }}
 Entrada:   {{ r.fecha_checkin | fecha }} (desde las 14:00)
 Salida:    {{ r.fecha_checkout | fecha }} (hasta las 12:00)
 Noches:    {{ r.noches }}
-Huespedes: {{ r.num_adultos }} {{ 'adulto' if r.num_adultos == 1 else 'adultos' }}{% if r.num_ninos %}, {{ r.num_ninos }} {{ 'nino' if r.num_ninos == 1 else 'ninos' }}{% endif %}
+Huéspedes: {{ r.num_adultos }} {{ 'adulto' if r.num_adultos == 1 else 'adultos' }}{% if r.num_ninos %}, {{ r.num_ninos }} {{ 'niño' if r.num_ninos == 1 else 'niños' }}{% endif %}
 
 Estado:    {{ r.estado | replace('_', ' ') | title }}
 
 DETALLE
 -------
 {% for h in habitaciones -%}
-{{ h.tipo }} - habitacion {{ h.numero }} (piso {{ h.piso }}): {{ h.subtotal | dinero }}
+{{ h.tipo }} - habitación {{ h.numero }} (piso {{ h.piso }}): {{ h.subtotal | dinero }}
 {% endfor -%}
 {% for s in servicios -%}
 {{ s.nombre }} x{{ s.cantidad }}: {{ s.subtotal | dinero }}
@@ -29,14 +29,14 @@ DETALLE
 TOTAL: {{ total | dinero }}
 {% if saldo and saldo > 0 %}Saldo pendiente: {{ saldo | dinero }}
 {% endif %}
-CANCELACION
+CANCELACIÓN
 -----------
-Sin cargo hasta 48 horas antes de la llegada. Despues de ese plazo se aplica
+Sin cargo hasta 48 horas antes de la llegada. Después de ese plazo se aplica
 un cargo del 20 % del total.
 
 --
 {{ hotel.nombre }} - {{ hotel.ciudad }}
-Recepcion 24 horas: {{ hotel.telefono }}
+Recepción 24 horas: {{ hotel.telefono }}
 
-Este comprobante se genero automaticamente al registrar la reserva.
-Conserva el codigo: lo necesitaras al llegar.
+Este comprobante se generó automáticamente al registrar la reserva.
+Conserva el código: lo necesitarás al llegar.
