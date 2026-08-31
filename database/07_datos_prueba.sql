@@ -100,13 +100,17 @@ INSERT INTO temporada (nombre, fecha_inicio, fecha_fin, factor) VALUES
 -- ----------------------------------------------------------------------------
 -- 6. CATALOGO DE SERVICIOS
 -- ----------------------------------------------------------------------------
-INSERT INTO servicio (nombre, descripcion, precio, modo_cobro) VALUES
-    ('Desayuno buffet',      'Desayuno completo servido de 06:30 a 10:00',        8.50,  'POR_NOCHE'),
-    ('Parqueadero cubierto', 'Espacio privado en el subsuelo del hotel',          5.00,  'POR_NOCHE'),
-    ('Traslado aeropuerto',  'Transporte privado desde o hacia el aeropuerto',   25.00,  'POR_UNIDAD'),
-    ('Lavandería express',   'Servicio de lavado y planchado en 6 horas',        12.00,  'POR_UNIDAD'),
-    ('Tour centro histórico','Recorrido guiado de medio día por el centro',      30.00,  'POR_UNIDAD'),
-    ('Cena romántica',       'Cena de tres tiempos servida en la habitación',    45.00,  'POR_UNIDAD');
+-- El parqueadero pasa a ser un beneficio incluido en la tarifa (ver
+-- Habitacion.servicios_incluidos), por eso no se ofrece como servicio pagado.
+-- Los servicios retirados se dejan como filas inactivas y no se borran:
+-- hay reservas historicas que los referencian y los reportes los necesitan.
+INSERT INTO servicio (nombre, descripcion, precio, modo_cobro, activo) VALUES
+    ('Desayuno buffet',      'Desayuno completo servido de 06:30 a 10:00',        8.50,  'POR_NOCHE',  TRUE),
+    ('Parqueadero cubierto', 'Espacio privado en el subsuelo del hotel',          5.00,  'POR_NOCHE',  FALSE),
+    ('Traslado aeropuerto',  'Transporte privado desde o hacia el aeropuerto',   25.00,  'POR_UNIDAD', TRUE),
+    ('Lavandería express',   'Servicio de lavado y planchado en 6 horas',        12.00,  'POR_UNIDAD', TRUE),
+    ('Tour centro histórico','Recorrido guiado de medio día por el centro',      30.00,  'POR_UNIDAD', FALSE),
+    ('Cena romántica',       'Cena de tres tiempos servida en la habitación',    45.00,  'POR_UNIDAD', FALSE);
 
 -- ----------------------------------------------------------------------------
 -- 7. HISTORIAL DE RESERVAS
