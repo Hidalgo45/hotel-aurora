@@ -88,6 +88,19 @@ h3 { font-size: var(--au-txt-xl); }
 .navbar-aurora .nav-link:hover,
 .navbar-aurora .nav-link.activo { color: #fff; text-decoration: underline; }
 
+/* Grupo de sesion: "Crear cuenta" e "Iniciar sesion" necesitan aire entre si,
+   sobre todo porque el segundo es un boton y el primero un enlace. */
+.nav-sesion { gap: var(--au-e1); }
+@media (min-width: 992px) {
+  .nav-sesion { align-items: center; gap: var(--au-e2); }
+  .nav-sesion .nav-link { padding-left: 0; padding-right: 0; }
+  .navbar-aurora .navbar-nav.me-auto { margin-left: var(--au-e2); }
+  .navbar-aurora .navbar-nav.me-auto .nav-link {
+    padding-left: .85rem;
+    padding-right: .85rem;
+  }
+}
+
 .btn-primary {
   background: var(--au-primario);
   border-color: var(--au-primario);
@@ -121,6 +134,42 @@ h3 { font-size: var(--au-txt-xl); }
   box-shadow: var(--au-sombra);
   padding: var(--au-e3);
 }
+
+/* El hero pinta su texto de blanco y la tarjeta del buscador vive dentro de el.
+   Sin estas reglas las etiquetas heredan blanco sobre fondo blanco y quedan
+   invisibles (contraste 1:1). */
+.buscador,
+.buscador h2,
+.buscador label,
+.buscador p             { color: var(--au-texto); }
+.buscador .text-suave,
+.buscador [data-noches] { color: var(--au-texto-suave); }
+
+/* Encabezado del buscador: separa la pregunta de los campos */
+.buscador-cab {
+  border-bottom: 1px solid var(--au-borde);
+  padding-bottom: var(--au-e1);
+  margin-bottom: var(--au-e2);
+}
+.buscador-cab h2 { font-weight: 700; }
+
+/* Tarjetas de la seccion "Por que reservar directamente" */
+.ventaja {
+  height: 100%;
+  background: var(--au-superficie);
+  border: 1px solid var(--au-borde);
+  border-top: 3px solid var(--au-acento);
+  border-radius: var(--au-radio);
+  padding: var(--au-e3);
+}
+.ventaja h3 {
+  font-size: var(--au-txt-lg);
+  font-weight: 700;
+  color: var(--au-texto);
+  margin: 0 0 var(--au-e1);
+}
+.ventaja p { color: var(--au-texto-suave); margin: 0; }
+.ventaja a { color: var(--au-primario); font-weight: 600; }
 
 /* Etiquetas de estado: el color va acompanado de texto, nunca solo */
 .estado {
