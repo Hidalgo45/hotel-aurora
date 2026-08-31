@@ -237,12 +237,23 @@ def confirmacion(codigo: str):
         flash(f"No encontramos ninguna reserva con el codigo {codigo}.", "warning")
         return redirect(url_for("publico.home"))
 
+    # reserva["total"] guarda solo el alojamiento: el procedimiento almacenado
+    # lo calcula al crear la reserva, y los servicios se agregan despues. El
+    # total que ve el cliente debe incluir ambos, igual que el comprobante que
+    # se envia por correo.
+    alojamiento = Decimal(reserva["total"])
+    servicios_usd = Decimal(reserva["servicios"])
+    total = alojamiento + servicios_usd
+
     return render_template(
         "publico/confirmacion.html",
         r=reserva,
         habitaciones=reservas_repo.habitaciones_de(reserva["id_reserva"]),
         servicios=reservas_repo.servicios_de(reserva["id_reserva"]),
-        saldo=Decimal(reserva["total"]) - Decimal(reserva["pagado"]),
+        alojamiento=alojamiento,
+        servicios_usd=servicios_usd,
+        total=total,
+        saldo=total - Decimal(reserva["pagado"]),
     )
 
 

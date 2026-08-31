@@ -17,7 +17,7 @@
       <thead>
         <tr>
           <th>Código</th><th>Fechas</th><th>Habitaciones</th>
-          <th>Estado</th><th class="text-end">Total</th><th></th>
+          <th>Estado</th><th class="text-end">Total</th><th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -43,13 +43,13 @@
             </span>
           </td>
           <td data-etiqueta="Total" class="text-end precio">{{ r.total | dinero }}</td>
-          <td data-etiqueta="" class="text-end">
+          <td data-etiqueta="Acciones" class="text-end">
             {% if r.estado in ['PENDIENTE', 'CONFIRMADA'] %}
             <form method="post"
                   action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
-                  data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿¿Confirmas?">
+                  data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿Confirmas?">
               <input type="hidden" name="motivo" value="Cancelada por el huésped">
-              <button class="btn btn-sm btn-outline-danger">Cancelar</button>
+              <button class="btn btn-sm btn-outline-danger">Cancelar reserva</button>
             </form>
             {% endif %}
           </td>

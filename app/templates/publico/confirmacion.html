@@ -42,7 +42,10 @@
         </div>
         <div class="col-6 col-md-3">
           <p class="small text-suave mb-1">Huéspedes</p>
-          <p class="mb-0 fw-semibold">{{ r.num_adultos }} adultos, {{ r.num_ninos }} niños</p>
+          <p class="mb-0 fw-semibold">
+            {{ r.num_adultos }} {{ 'adulto' if r.num_adultos == 1 else 'adultos' }}{% if r.num_ninos %},
+            {{ r.num_ninos }} {{ 'niño' if r.num_ninos == 1 else 'niños' }}{% endif %}
+          </p>
         </div>
       </div>
 
@@ -85,9 +88,17 @@
       {% endif %}
 
       <div class="border-top pt-3">
-        <div class="d-flex justify-content-between">
-          <span class="text-suave">Total de la reserva</span>
-          <span class="precio h4 mb-0">{{ r.total | dinero }}</span>
+        <div class="d-flex justify-content-between small text-suave">
+          <span>Alojamiento</span><span>{{ alojamiento | dinero }}</span>
+        </div>
+        {% if servicios_usd > 0 %}
+        <div class="d-flex justify-content-between small text-suave mt-1">
+          <span>Servicios adicionales</span><span>{{ servicios_usd | dinero }}</span>
+        </div>
+        {% endif %}
+        <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+          <span class="fw-semibold">Total de la reserva</span>
+          <span class="precio h4 mb-0">{{ total | dinero }}</span>
         </div>
         <div class="d-flex justify-content-between small text-suave mt-1">
           <span>Abonado</span><span>{{ r.pagado | dinero }}</span>
@@ -111,6 +122,13 @@
         </form>
         {% endif %}
 
+        {% if usuario_actual and usuario_actual.rol == 'CLIENTE' %}
+        <a class="btn btn-primary"
+           href="{{ url_for('cuenta.mis_reservas') }}">
+          Ver todas mis reservas
+        </a>
+        {% endif %}
+
         <a class="btn btn-outline-primary" href="{{ url_for('publico.catalogo') }}">
           Reservar otra habitación
         </a>
@@ -118,7 +136,7 @@
         {% if usuario_actual and r.estado in ['PENDIENTE', 'CONFIRMADA'] %}
         <form method="post" class="ms-auto"
               action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
-              data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿¿Confirmas?">
+              data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿Confirmas?">
           <input type="hidden" name="motivo" value="Cancelada por el huésped">
           <button type="submit" class="btn btn-outline-danger">Cancelar reserva</button>
         </form>
@@ -130,6 +148,10 @@
 
   <p class="small text-suave mt-3 text-center">
     Guarda este código: lo necesitarás al llegar al hotel.
+    {% if usuario_actual and usuario_actual.rol == 'CLIENTE' %}
+    Si lo pierdes, lo encuentras en
+    <a href="{{ url_for('cuenta.mis_reservas') }}">Mis reservas</a>.
+    {% endif %}
     Consultas al {{ hotel.telefono }}.
   </p>
 </div>

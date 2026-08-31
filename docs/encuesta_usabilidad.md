@@ -116,22 +116,100 @@ Escala: **1 = muy en desacuerdo · 5 = muy de acuerdo**
 
 ---
 
+## Resultados obtenidos — 31 de agosto de 2026
+
+**33 respuestas** recogidas mediante formulario de Google. El análisis se
+reproduce con `docs/evidencias_ux/analizar_encuesta.py` sobre el archivo
+`formulario_hotel.csv`.
+
+### El puntaje SUS no resultó utilizable, y esa es una conclusión válida
+
+| Medida | Valor |
+|---|---|
+| SUS promedio | 57.5 / 100 |
+| Mediana | 52.5 |
+| Rango | 47.5 – 100 |
+
+Antes de reportar ese número revisamos la consistencia interna de las respuestas:
+
+- El **77 %** marcó a la vez «me resultó fácil reservar» (4-5) y «el sistema me
+  pareció innecesariamente complejo» (4-5). Son afirmaciones opuestas: no pueden
+  ser ciertas las dos.
+- El **39 %** marcó exactamente el mismo número en las diez afirmaciones.
+
+Quien responde 5 en todas obtiene exactamente 50 puntos de SUS, y la mediana de
+52.5 confirma que la mayoría hizo eso. El puntaje refleja que buena parte
+respondió sin leer, no la usabilidad del sistema.
+
+**Esa detección es justamente para lo que sirve el diseño del SUS.** Las
+afirmaciones alternan sentido positivo y negativo para que una respuesta
+automática se delate. El instrumento funcionó; lo que no sirve es usar ese
+promedio como medida de usabilidad. Por eso lo descartamos y nos apoyamos en el
+dato conductual.
+
+### Tareas completadas sin ayuda — el dato que sí mide
+
+Esta pregunta no depende de interpretar una escala: la persona marca lo que
+efectivamente logró hacer.
+
+| Tarea | Lo lograron | % |
+|---|---|---|
+| Buscar habitaciones libres | 27 / 33 | 81.8 % |
+| Completar una reserva | 24 / 33 | 72.7 % |
+| Entender el mensaje de error | 24 / 33 | 72.7 % |
+| **Volver a encontrar el código de la reserva** | 19 / 33 | **57.6 %** |
+| **Cancelar la reserva** | 14 / 33 | **42.4 %** |
+
+Las dos últimas filas motivaron los cambios de la sección siguiente.
+
+### Participantes por dispositivo
+
+| Dispositivo | Participantes |
+|---|---|
+| Celular | 16 |
+| Computador | 7 |
+| Tablet | 6 |
+
+---
+
 ## Las dos mejoras que aplicamos
 
-Esta es la parte que convierte la encuesta en **evidencia de diseño centrado en el usuario** y no en un trámite. Sin esto, la encuesta suma poco.
+Esta es la parte que convierte la encuesta en **evidencia de diseño centrado en
+el usuario** y no en un trámite.
 
-### Mejora 1
+### Mejora 1 — El botón de cancelar no tenía nombre en móvil
 
-- **Hallazgo:**
-- **Cuántas personas lo reportaron:**
-- **Qué cambiamos:**
-- **Commit / archivo:**
-- **Captura antes y después:**
+- **Hallazgo:** solo el **42.4 %** (14 de 33) logró cancelar su reserva.
+- **Causa encontrada:** en `mis_reservas.html` la acción vivía en la última
+  columna de la tabla, sin encabezado (`<th></th>`) y con `data-etiqueta=""`.
+  En móvil, donde la tabla se convierte en tarjetas, el botón aparecía suelto
+  al final sin ninguna etiqueta que dijera para qué servía. Como 16 de los 33
+  participantes usaron celular, ahí estaba el grueso del problema.
+- **Qué cambiamos:** la columna pasa a llamarse «Acciones» y la celda lleva
+  `data-etiqueta="Acciones"`, de modo que en móvil el botón sale bajo un rótulo
+  visible. El texto pasa de «Cancelar» a «Cancelar reserva».
+- **Archivos:** `app/templates/cuenta/mis_reservas.html`
+- **Verificación:** a 375 px el botón mide 44 px de alto, muestra la etiqueta
+  «Acciones» encima y no genera desplazamiento horizontal.
 
-### Mejora 2
+### Mejora 2 — No había camino de vuelta al código de la reserva
 
-- **Hallazgo:**
-- **Cuántas personas lo reportaron:**
-- **Qué cambiamos:**
-- **Commit / archivo:**
-- **Captura antes y después:**
+- **Hallazgo:** solo el **57.6 %** (19 de 33) volvió a encontrar su código.
+- **Causa encontrada:** desde la página de confirmación no existía ningún enlace
+  hacia «Mis reservas». La única vía era el menú de navegación, que en móvil
+  está plegado dentro del botón de hamburguesa.
+- **Qué cambiamos:** se agrega el botón **«Ver todas mis reservas»** entre las
+  acciones de la confirmación, y una línea al pie que dice dónde recuperar el
+  código si se pierde.
+- **Archivos:** `app/templates/publico/confirmacion.html`
+
+### Corrección adicional detectada al verificar
+
+Al revisar la página de confirmación encontramos que **«Total de la reserva»
+mostraba solo el alojamiento**, sin los servicios contratados, mientras que el
+comprobante enviado por correo sí los sumaba. La misma reserva mostraba $90.00
+en pantalla y $152.00 en el correo, y el saldo pendiente salía mal en
+consecuencia.
+
+Se corrigió desglosando alojamiento y servicios por separado antes del total.
+**Archivos:** `app/blueprints/publico.py`, `app/templates/publico/confirmacion.html`
