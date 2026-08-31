@@ -6,7 +6,7 @@
 
   <h1 class="h3 mb-1">Inventario de habitaciones</h1>
   <p class="text-suave mb-4">
-    El estado cambia solo cuando avanza una reserva. Aqui se ajusta a mano solo
+    El estado cambia solo cuando avanza una reserva. Aquí se ajusta a mano solo
     para limpieza o mantenimiento.
   </p>
 
@@ -29,7 +29,7 @@
     <table class="table align-middle tabla-adaptable">
       <thead>
         <tr>
-          <th>Numero</th><th>Tipo</th><th>Piso</th><th>Capacidad</th>
+          <th>Número</th><th>Tipo</th><th>Piso</th><th>Capacidad</th>
           <th class="text-end">Tarifa base</th><th>Estado</th><th>Cambiar a</th>
         </tr>
       </thead>
@@ -49,7 +49,7 @@
             <form method="post" class="d-flex gap-1"
                   action="{{ url_for('admin.estado_habitacion', id_habitacion=h.id_habitacion) }}">
               <select name="estado" class="form-select form-select-sm"
-                      aria-label="Nuevo estado para la habitacion {{ h.numero }}">
+                      aria-label="Nuevo estado para la habitación {{ h.numero }}">
                 <option value="DISPONIBLE">Disponible</option>
                 <option value="LIMPIEZA">Limpieza</option>
                 <option value="MANTENIMIENTO">Mantenimiento</option>

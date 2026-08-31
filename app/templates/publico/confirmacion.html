@@ -9,7 +9,7 @@
 
       <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4">
         <div>
-          <p class="text-uppercase small text-suave mb-1">Codigo de reserva</p>
+          <p class="text-uppercase small text-suave mb-1">Código de reserva</p>
           <h1 class="h2 mb-0" style="letter-spacing:.04em;">{{ r.codigo }}</h1>
         </div>
         <span class="estado estado-{{ r.estado }}">{{ r.estado | replace('_',' ') | title }}</span>
@@ -18,12 +18,12 @@
       {% if r.estado == 'CANCELADA' %}
       <div class="alert alert-danger" role="alert">
         Esta reserva fue cancelada. Si necesitas volver a alojarte, puedes hacer
-        una nueva busqueda de disponibilidad.
+        una nueva búsqueda de disponibilidad.
       </div>
       {% elif r.estado == 'PENDIENTE' %}
       <div class="alert alert-warning" role="alert">
-        Tu reserva esta registrada. Se confirma automaticamente cuando se
-        abone al menos el 50 % del total en recepcion.
+        Tu reserva está registrada. Se confirma automáticamente cuando se
+        abone al menos el 50 % del total en recepción.
       </div>
       {% endif %}
 
@@ -41,8 +41,8 @@
           <p class="mb-0 fw-semibold">{{ r.noches }}</p>
         </div>
         <div class="col-6 col-md-3">
-          <p class="small text-suave mb-1">Huespedes</p>
-          <p class="mb-0 fw-semibold">{{ r.num_adultos }} adultos, {{ r.num_ninos }} ninos</p>
+          <p class="small text-suave mb-1">Huéspedes</p>
+          <p class="mb-0 fw-semibold">{{ r.num_adultos }} adultos, {{ r.num_ninos }} niños</p>
         </div>
       </div>
 
@@ -50,7 +50,7 @@
       <div class="tabla-scroll mb-4">
         <table class="table table-sm align-middle mb-0">
           <thead>
-            <tr><th>Habitacion</th><th>Tipo</th><th class="text-end">Subtotal</th></tr>
+            <tr><th>Habitación</th><th>Tipo</th><th class="text-end">Subtotal</th></tr>
           </thead>
           <tbody>
             {% for h in habitaciones %}
@@ -112,14 +112,14 @@
         {% endif %}
 
         <a class="btn btn-outline-primary" href="{{ url_for('publico.catalogo') }}">
-          Reservar otra habitacion
+          Reservar otra habitación
         </a>
 
         {% if usuario_actual and r.estado in ['PENDIENTE', 'CONFIRMADA'] %}
         <form method="post" class="ms-auto"
               action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
-              data-confirmar="Se cancelara la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. Confirmas?">
-          <input type="hidden" name="motivo" value="Cancelada por el huesped">
+              data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿¿Confirmas?">
+          <input type="hidden" name="motivo" value="Cancelada por el huésped">
           <button type="submit" class="btn btn-outline-danger">Cancelar reserva</button>
         </form>
         {% endif %}
@@ -129,7 +129,7 @@
   </div>
 
   <p class="small text-suave mt-3 text-center">
-    Guarda este codigo: lo necesitaras al llegar al hotel.
+    Guarda este código: lo necesitarás al llegar al hotel.
     Consultas al {{ hotel.telefono }}.
   </p>
 </div>
