@@ -111,6 +111,13 @@ def test_transicion_de_estado_valida_funciona():
     hab.cambiar_estado(EstadoHabitacion.OCUPADA)
     assert hab.estado is EstadoHabitacion.OCUPADA
 
+def test_esta_disponible_depende_del_estado():
+    """Solo esta libre la habitacion cuyo estado lo dice."""
+    habitacion = HabitacionEstandar("115", 1, Decimal("45.00"))
+    assert habitacion.esta_disponible()
+
+    habitacion.cambiar_estado(EstadoHabitacion.RESERVADA)
+    assert not habitacion.esta_disponible()
 
 def test_validaciones_del_constructor():
     with pytest.raises(ValorInvalidoError):
@@ -177,6 +184,31 @@ def test_reserva_rechaza_mas_huespedes_que_capacidad():
     # El mensaje debe ser accionable: dice cuantos caben y que hacer
     mensaje = str(error.value).lower()
     assert "6 huespedes" in mensaje and "admiten 2" in mensaje
+
+
+def test_no_se_puede_reservar_una_fecha_que_ya_paso():
+    """La reserva se construye, pero validar_fecha_inicio la rechaza."""
+    ayer = date.today() - timedelta(days=1)
+    reserva = Reserva(_cliente_demo(), ayer, ayer + timedelta(days=2), adultos=1)
+
+    with pytest.raises(ReglaNegocioError):
+        reserva.validar_fecha_inicio()
+
+
+
+def test_los_servicios_se_cobran_segun_su_modo():
+    """Por noche se multiplica por las noches; por unidad no."""
+    hoy = date.today()
+    reserva = Reserva(_cliente_demo(), hoy + timedelta(days=5),
+                      hoy + timedelta(days=8), adultos=2)     # 3 noches
+    reserva.agregar_habitacion(HabitacionEstandar("114", 1, Decimal("50.00")))
+
+    reserva.agregar_servicio(ServicioPorNoche("Desayuno", Decimal("8.00")))
+    reserva.agregar_servicio(ServicioPorUnidad("Traslado", Decimal("25.00")))
+
+    # 8.00 x 3 noches = 24.00   +   25.00 x 1 = 25.00
+    assert reserva.calcular_servicios() == Decimal("49.00")
+
 
 
 def test_total_suma_alojamiento_y_servicios():
