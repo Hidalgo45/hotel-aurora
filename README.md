@@ -97,7 +97,13 @@ hotel-aurora/
 │   ├── 06_seguridad.sql      Roles, GRANT, RLS y consultas de calidad
 │   ├── 07_datos_prueba.sql   28 habitaciones y reservas de demostración
 │   └── backup/               backup.ps1 · backup.sh · restore.md
-├── docs/                 Diagramas, bitácora de Git y evidencias UX
+├── docs/
+│   ├── modelo_entidad_relacion.svg   Diagrama E-R (criterio 1.1)
+│   ├── diagrama_clases.svg           Diagrama UML de clases (criterio 3.1)
+│   ├── _diagramas.html               Fuente Mermaid para regenerar ambos
+│   ├── _servidor_diagramas.py        Servidor temporal que los exporta a SVG
+│   ├── bitacora_git.md · encuesta_usabilidad.md
+│   └── evidencias_ux/                Capturas responsive y resultados SUS
 ├── tests/                Pruebas del dominio (no requieren base de datos)
 ├── setup_db.py           Instalador de la base
 └── run.py                Punto de entrada
@@ -115,20 +121,32 @@ hotel-aurora/
 | Respaldar la base | `powershell -File database\backup\backup.ps1` |
 | Ver reparto de commits | `git shortlog -sn --all` |
 
+### Regenerar los diagramas
+
+Los diagramas se escriben en Mermaid dentro de `docs/_diagramas.html` y se exportan a SVG desde el navegador. Si cambian el modelo o las clases, hay que regenerarlos:
+
+```powershell
+.\.venv\Scripts\python.exe docs\_servidor_diagramas.py
+```
+
+Abrir <http://127.0.0.1:8899/docs/_diagramas.html>, esperar a que la consola del servidor confirme los dos `[OK]`, y cerrar con `Ctrl + C`. Los SVG quedan actualizados en `docs/`.
+
+> Word e Illustrator importan SVG directamente y sin pérdida de calidad. Si necesitan PNG, abran el SVG en el navegador y usen clic derecho → *Guardar imagen como*.
+
 ---
 
 ## 7. Cómo el proyecto responde a la rúbrica
 
 | Criterio | Puntos | Dónde está la evidencia |
 |---|---|---|
-| 1.1 Modelo E-R y normalización | 3 | `docs/modelo_datos.pdf` · `database/01_schema.sql` |
+| 1.1 Modelo E-R y normalización | 3 | `docs/modelo_entidad_relacion.svg` · `database/01_schema.sql` |
 | 1.2 Restricciones, triggers y procedimientos | 3 | `database/02_constraints.sql`, `03_triggers.sql`, `04_procedures.sql` |
 | 1.4 Dos reportes complejos | 2 | `database/05_reportes.sql` · vista `/admin/reportes` |
 | 1.5 Seguridad, calidad y respaldos | 2 | `database/06_seguridad.sql` · `database/backup/` |
 | 2.1 Responsive y mensajes de error | 4 | `app/static/css/aurora.css` · `docs/evidencias_ux/` |
 | 2.3 Funcionalidades completas | 3 | Este README + prototipo funcionando |
 | 2.4 Git colaborativo | 3 | Ramas, Pull Requests y `docs/bitacora_git.md` |
-| 3.1 Diagrama de clases | 3 | `docs/diagrama_clases.png` |
+| 3.1 Diagrama de clases | 3 | `docs/diagrama_clases.svg` |
 | 3.2 Clases que representan el dominio | 2 | `app/dominio/` + `tests/` en verde |
 | 3.3 Encapsulamiento, herencia, polimorfismo | 3 | `app/dominio/habitaciones.py` |
 | 3.4 Organización y documentación | 2 | Docstrings, type hints y este README |

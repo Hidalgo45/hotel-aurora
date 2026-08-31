@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Diagramas — Hotel Aurora</title>
+<style>
+  body { font-family: Segoe UI, system-ui, sans-serif; background:#fff; color:#141F24; margin:0; padding:24px 32px; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  h2 { font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:#8E6115; margin:32px 0 8px; }
+  p.sub { color:#52646A; margin:0 0 8px; font-size:14px; }
+  .lienzo { background:#fff; border:1px solid #D8DDD5; border-radius:8px; padding:20px; overflow:auto; }
+</style>
+</head>
+<body>
+
+<h1>Hotel Aurora · Diagramas del proyecto</h1>
+<p class="sub">Modelo entidad-relación (criterio 1.1) y diagrama de clases (criterio 3.1).</p>
+
+<h2>1 · Modelo Entidad-Relación</h2>
+<div class="lienzo">
+<pre class="mermaid" id="d1">
+erDiagram
+  ROL ||--o{ USUARIO : clasifica
+  USUARIO ||--o| CLIENTE : especializa
+  USUARIO ||--o| EMPLEADO : especializa
+  CLIENTE ||--o{ RESERVA : realiza
+  EMPLEADO ||--o{ RESERVA : gestiona
+  TIPO_HABITACION ||--o{ HABITACION : define
+  RESERVA ||--|{ RESERVA_HABITACION : detalla
+  HABITACION ||--o{ RESERVA_HABITACION : se_asigna_en
+  RESERVA ||--o{ RESERVA_SERVICIO : consume
+  SERVICIO ||--o{ RESERVA_SERVICIO : se_vende_en
+  RESERVA ||--o{ PAGO : se_salda_con
+  HABITACION ||--o{ BITACORA_HABITACION : registra
+  RESERVA ||--o{ BITACORA_HABITACION : origina
+
+  ROL {
+    smallserial id_rol PK
+    varchar nombre UK
+    varchar descripcion
+  }
+  USUARIO {
+    serial id_usuario PK
+    smallint id_rol FK
+    char cedula UK
+    varchar nombres
+    varchar apellidos
+    varchar email UK
+    varchar telefono
+    varchar password_hash
+    boolean activo
+    timestamptz creado_en
+  }
+  CLIENTE {
+    int id_cliente PK, FK
+    date fecha_nacimiento
+    varchar ciudad
+    varchar pais
+    text preferencias
+  }
+  EMPLEADO {
+    int id_empleado PK, FK
+    varchar cargo
+    date fecha_ingreso
+  }
+  TIPO_HABITACION {
+    smallserial id_tipo PK
+    varchar codigo UK
+    varchar nombre
+    text descripcion
+    smallint capacidad_max
+    numeric tarifa_base
+  }
+  HABITACION {
+    serial id_habitacion PK
+    smallint id_tipo FK
+    varchar numero UK
+    smallint piso
+    enum estado
+    boolean activa
+  }
+  TEMPORADA {
+    smallserial id_temporada PK
+    varchar nombre
+    date fecha_inicio
+    date fecha_fin
+    numeric factor
+  }
+  SERVICIO {
+    serial id_servicio PK
+    varchar nombre UK
+    numeric precio
+    enum modo_cobro
+    boolean activo
+  }
+  RESERVA {
+    serial id_reserva PK
+    varchar codigo UK
+    int id_cliente FK
+    int id_empleado FK
+    date fecha_checkin
+    date fecha_checkout
+    smallint num_adultos
+    smallint num_ninos
+    enum estado
+    numeric total
+    timestamptz creada_en
+  }
+  RESERVA_HABITACION {
+    serial id_detalle PK
+    int id_reserva FK
+    int id_habitacion FK
+    daterange estadia
+    numeric subtotal
+    boolean anulado
+  }
+  RESERVA_SERVICIO {
+    serial id_rs PK
+    int id_reserva FK
+    int id_servicio FK
+    smallint cantidad
+    numeric precio_unitario
+  }
+  PAGO {
+    serial id_pago PK
+    int id_reserva FK
+    numeric monto
+    enum metodo
+    varchar referencia
+    timestamptz fecha
+  }
+  BITACORA_HABITACION {
+    bigserial id_bitacora PK
+    int id_habitacion FK
+    int id_reserva FK
+    enum estado_anterior
+    enum estado_nuevo
+    name usuario_bd
+    timestamptz ocurrido_en
+  }
+</pre>
+</div>
+
+<h2>2 · Diagrama de clases</h2>
+<div class="lienzo">
+<pre class="mermaid" id="d2">
+classDiagram
+  direction TB
+
+  class Persona {
+    <<abstract>>
+    -_cedula: str
+    -_nombres: str
+    -_apellidos: str
+    -_email: str
+    +nombre_completo() str
+    +descripcion_rol()* str
+    +permisos()* list
+  }
+  class Usuario {
+    -__password_hash: str
+    +verificar_clave(clave) bool
+    +cambiar_clave(nueva) None
+  }
+  class Administrador {
+    +descripcion_rol() str
+    +permisos() list
+  }
+  class Recepcionista {
+    -_turno: str
+    +descripcion_rol() str
+    +permisos() list
+    +registrar_check_in(reserva) None
+  }
+  class Cliente {
+    -_fecha_nacimiento: date
+    +descripcion_rol() str
+    +permisos() list
+    +edad() int
+    +es_recurrente() bool
+  }
+
+  class Habitacion {
+    <<abstract>>
+    -_numero: str
+    -_piso: int
+    -_tarifa_base: Decimal
+    -__estado: EstadoHabitacion
+    +estado() EstadoHabitacion
+    +cambiar_estado(nuevo) None
+    +esta_disponible() bool
+    +calcular_tarifa(noches, factor)* Decimal
+    +servicios_incluidos()* list
+    +capacidad()* int
+  }
+  class HabitacionEstandar {
+    +calcular_tarifa(noches, factor) Decimal
+    +servicios_incluidos() list
+    +capacidad() int
+  }
+  class HabitacionSuite {
+    +RECARGO: Decimal
+    +DESCUENTO_LARGA: Decimal
+    +calcular_tarifa(noches, factor) Decimal
+    +servicios_incluidos() list
+    +capacidad() int
+  }
+  class HabitacionFamiliar {
+    -_camas_extra: int
+    +CARGO_CAMA_EXTRA: Decimal
+    +calcular_tarifa(noches, factor) Decimal
+    +servicios_incluidos() list
+    +capacidad() int
+  }
+  class FabricaHabitaciones {
+    +crear(codigo_tipo, datos)$ Habitacion
+  }
+
+  class Servicio {
+    <<abstract>>
+    -_nombre: str
+    -_precio: Decimal
+    +costo(noches, cantidad)* Decimal
+  }
+  class ServicioPorNoche {
+    +costo(noches, cantidad) Decimal
+  }
+  class ServicioPorUnidad {
+    +costo(noches, cantidad) Decimal
+  }
+
+  class Reserva {
+    -_codigo: str
+    -_cliente: Cliente
+    -_habitaciones: list
+    -_servicios: list
+    -__estado: EstadoReserva
+    +noches() int
+    +huespedes() int
+    +capacidad_total() int
+    +agregar_habitacion(h) None
+    +agregar_servicio(s, cant) None
+    +calcular_total(factor) Decimal
+    +confirmar() None
+    +registrar_check_in() None
+    +cancelar(motivo) Decimal
+  }
+
+  class RepositorioReservas {
+    <<interface>>
+    +guardar(reserva)* str
+    +buscar(codigo)* Reserva
+    +cancelar(codigo, motivo)* Decimal
+  }
+  class ReservaRepositorioPG {
+    -_pool
+    +guardar(reserva) str
+    +buscar(codigo) Reserva
+    +cancelar(codigo, motivo) Decimal
+  }
+  class GestorReservas {
+    -_repo: RepositorioReservas
+    +crear_reserva(dto) Reserva
+    +cancelar_reserva(codigo, motivo) Decimal
+  }
+
+  Persona <|-- Usuario
+  Usuario <|-- Administrador
+  Usuario <|-- Recepcionista
+  Usuario <|-- Cliente
+  Habitacion <|-- HabitacionEstandar
+  Habitacion <|-- HabitacionSuite
+  Habitacion <|-- HabitacionFamiliar
+  Servicio <|-- ServicioPorNoche
+  Servicio <|-- ServicioPorUnidad
+  RepositorioReservas <|.. ReservaRepositorioPG
+  FabricaHabitaciones ..> Habitacion : crea
+  Reserva "1" o-- "1..*" Habitacion : incluye
+  Reserva "1" o-- "0..*" Servicio : consume
+  Cliente "1" --> "0..*" Reserva : realiza
+  GestorReservas --> RepositorioReservas : usa
+  GestorReservas ..> Reserva : construye
+</pre>
+</div>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'neutral',
+    themeVariables: { fontFamily: 'Segoe UI, system-ui, sans-serif' }
+  });
+
+  // Se renderiza uno por uno: si un diagrama falla, el otro igual se genera.
+  const ARCHIVOS = { d1: 'modelo_entidad_relacion.svg', d2: 'diagrama_clases.svg' };
+  const resultados = {};
+
+  for (const [id, archivo] of Object.entries(ARCHIVOS)) {
+    const pre = document.getElementById(id);
+    const fuente = pre.textContent;
+    try {
+      const { svg } = await mermaid.render('render_' + id, fuente);
+      pre.outerHTML = svg;
+
+      await fetch('/guardar?nombre=' + encodeURIComponent(archivo), {
+        method: 'POST',
+        headers: { 'Content-Type': 'image/svg+xml' },
+        body: svg
+      });
+      resultados[id] = { ok: true, archivo, bytes: svg.length };
+    } catch (e) {
+      resultados[id] = { ok: false, error: String(e.message || e) };
+    }
+  }
+
+  window.RESULTADOS = resultados;
+  window.DIAGRAMAS_LISTOS = true;
+</script>
+
+</body>
+</html>
