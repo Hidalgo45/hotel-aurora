@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% block titulo %}Gestion de reservas - {{ hotel.nombre }}{% endblock %}
+{% block titulo %}Gestión de reservas - {{ hotel.nombre }}{% endblock %}
 
 {% block contenido %}
 <div class="container py-4">
 
-  <h1 class="h3 mb-3">Gestion de reservas</h1>
+  <h1 class="h3 mb-3">Gestión de reservas</h1>
 
   <form class="buscador mb-4" method="get">
     <div class="row g-3 align-items-end">
       <div class="col-12 col-md-5">
         <label for="q" class="form-label">Buscar</label>
         <input type="search" class="form-control" id="q" name="q"
-               value="{{ busqueda }}" placeholder="Codigo, nombre o cedula">
+               value="{{ busqueda }}" placeholder="Código, nombre o cédula">
       </div>
       <div class="col-12 col-md-4">
         <label for="estado" class="form-label">Estado</label>
@@ -36,7 +36,7 @@
     <table class="table align-middle tabla-adaptable">
       <thead>
         <tr>
-          <th>Codigo</th><th>Huesped</th><th>Fechas</th>
+          <th>Código</th><th>Huésped</th><th>Fechas</th>
           <th>Estado</th><th class="text-end">Total</th>
           <th class="text-end">Saldo</th><th>Acciones</th>
         </tr>
@@ -97,7 +97,7 @@
           <td colspan="7">
             <div class="alert alert-info mb-0" role="status">
               No hay reservas que coincidan con esa busqueda. Prueba con otro
-              codigo o quita el filtro de estado.
+              código o quita el filtro de estado.
             </div>
           </td>
         </tr>

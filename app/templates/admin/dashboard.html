@@ -4,8 +4,8 @@
 {% block contenido %}
 <div class="container py-4">
 
-  <h1 class="h3 mb-1">Tablero de gestion</h1>
-  <p class="text-suave mb-4">Estado del hotel al dia de hoy.</p>
+  <h1 class="h3 mb-1">Tablero de gestión</h1>
+  <p class="text-suave mb-4">Estado del hotel al día de hoy.</p>
 
   {# ---- Indicadores: 1 columna en movil, 2 en tablet, 4 en escritorio --- #}
   <div class="row g-3 mb-4">
@@ -44,14 +44,14 @@
     <div class="col-12 col-xl-8">
       <div class="card h-100">
         <div class="card-body">
-          <h2 class="h5 mb-3">Llegadas de los proximos 7 dias</h2>
+          <h2 class="h5 mb-3">Llegadas de los próximos 7 días</h2>
 
           {% if llegadas %}
           <div class="tabla-scroll">
             <table class="table table-sm align-middle tabla-adaptable mb-0">
               <thead>
                 <tr>
-                  <th>Codigo</th><th>Huesped</th><th>Entrada</th>
+                  <th>Código</th><th>Huésped</th><th>Entrada</th>
                   <th>Habitaciones</th><th>Estado</th><th></th>
                 </tr>
               </thead>
@@ -118,7 +118,7 @@
         <div class="card-body">
           <h2 class="h5 mb-1">Bitacora de habitaciones</h2>
           <p class="small text-suave mb-3">
-            Estos registros los escribe automaticamente el trigger
+            Estos registros los escribe automáticamente el trigger
             <code>trg_reserva_estado</code> cada vez que cambia el estado de una reserva.
           </p>
 
@@ -127,7 +127,7 @@
             <table class="table table-sm align-middle tabla-adaptable mb-0">
               <thead>
                 <tr>
-                  <th>Momento</th><th>Habitacion</th><th>Cambio</th>
+                  <th>Momento</th><th>Habitación</th><th>Cambio</th>
                   <th>Reserva</th><th>Usuario BD</th>
                 </tr>
               </thead>
@@ -150,7 +150,7 @@
           </div>
           {% else %}
           <p class="text-suave mb-0">
-            Todavia no hay movimientos registrados. Haz un check-in y aparecera aqui.
+            Todavia no hay movimientos registrados. Haz un check-in y aparecera aquí.
           </p>
           {% endif %}
         </div>
