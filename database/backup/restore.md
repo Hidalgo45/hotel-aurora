@@ -65,8 +65,47 @@ Llenar cada vez que se haga la prueba. Esta tabla es la evidencia que se muestra
 
 | Fecha | Archivo restaurado | Duración | Filas verificadas | Resultado | Responsable |
 |---|---|---|---|---|---|
-| | | | | | |
-| | | | | | |
-| | | | | | |
+| 2026-08-31 | `aurora_2026-08-31.dump` (133.6 KB) | 0.8 s | 314 en 13 tablas | Íntegra | Mateo Hidalgo |
+
+### Detalle de la prueba del 31/08/2026
+
+**Respaldo.** `backup.ps1` sobre `hotel_aurora`, formato custom con compresión 9. Duración: **1.1 s**. Salida: `aurora_2026-08-31.dump` (133.6 KB) y `esquema_2026-08-31.sql` (94.8 KB).
+
+**Restauración.** Sobre la base desechable `aurora_prueba`, con `pg_restore`. Duración: **0.8 s**, sin errores ni advertencias.
+
+**Verificación de integridad.** Se compararon los conteos de la base original contra la restaurada:
+
+| Objeto | Original | Restaurada |
+|---|---|---|
+| rol | 3 | 3 |
+| usuario | 12 | 12 |
+| cliente | 9 | 9 |
+| empleado | 3 | 3 |
+| tipo_habitacion | 3 | 3 |
+| habitacion | 28 | 28 |
+| temporada | 3 | 3 |
+| servicio | 6 | 6 |
+| reserva | 71 | 71 |
+| reserva_habitacion | 71 | 71 |
+| reserva_servicio | 34 | 34 |
+| pago | 67 | 67 |
+| bitacora_habitacion | 4 | 4 |
+| Triggers | 4 | 4 |
+| Restricciones CHECK | 26 | 26 |
+| Restricciones EXCLUDE | 2 | 2 |
+| Vistas de reportes | 4 | 4 |
+
+**Verificación funcional.** No basta con que estén las filas: se comprobó que la base restaurada *opera*.
+
+| Prueba | Resultado |
+|---|---|
+| `CALL sp_crear_reserva(...)` | Creó `RSV-20260831-0074`, total $180.00 |
+| Trigger de estado | La habitación 101 pasó sola a `RESERVADA` al confirmar |
+| Restricción anti-sobreventa | Rechazó fechas cruzadas con `RES-006` |
+| Vista `v_reporte_ocupacion` | Devolvió 18 filas |
+
+La transacción de prueba se revirtió con `ROLLBACK` y la base `aurora_prueba` se eliminó al terminar.
+
+**Conclusión.** El respaldo es restaurable y la base reconstruida conserva datos, restricciones, triggers, procedimientos y vistas.
 
 > Si un docente pregunta «¿y si les borro la base ahora mismo?», la respuesta no es «tenemos respaldos», sino **«tenemos respaldos y los probamos: aquí está la bitácora»**.
