@@ -45,6 +45,31 @@ def test_polimorfismo_cada_tipo_cobra_distinto():
     assert tarifas[2] == Decimal("207.00")     # 135 + (12 x 2 x 3)
     assert len(set(tarifas)) == 3
 
+def test_cada_tipo_incluye_sus_propios_servicios():
+    """Mismo metodo, tres respuestas distintas: polimorfismo tambien aqui."""
+    estandar = HabitacionEstandar("101", 1, Decimal("45.00"))
+    suite = HabitacionSuite("401", 4, Decimal("45.00"))
+    familiar = HabitacionFamiliar("301", 3, Decimal("45.00"), camas_extra=2)
+
+    # El parqueadero es un beneficio incluido en la tarifa, no un extra
+    assert "Parqueadero" in estandar.servicios_incluidos()
+    assert "Parqueadero" in suite.servicios_incluidos()
+    assert "Parqueadero" in familiar.servicios_incluidos()
+
+    # Cada tipo tiene lo suyo: el jacuzzi es exclusivo de la suite
+    assert "Jacuzzi" in suite.servicios_incluidos()
+    assert "Jacuzzi" not in estandar.servicios_incluidos()
+    assert "Jacuzzi" not in familiar.servicios_incluidos()
+
+    # La familiar piensa en ninos, la estandar no
+    assert "Cuna a pedido" in familiar.servicios_incluidos()
+    assert "Cuna a pedido" not in estandar.servicios_incluidos()
+
+    # Ninguna lista se repite: el metodo devuelve algo distinto en cada clase
+    assert estandar.servicios_incluidos() != suite.servicios_incluidos()
+    assert suite.servicios_incluidos() != familiar.servicios_incluidos()
+    assert estandar.servicios_incluidos() != familiar.servicios_incluidos()
+
 
 def test_suite_aplica_descuento_por_estadia_larga():
     suite = HabitacionSuite("402", 4, Decimal("100.00"))
@@ -195,6 +220,21 @@ def test_no_se_puede_cancelar_una_reserva_ya_iniciada():
 
     with pytest.raises(TransicionInvalidaError):
         reserva.cancelar("Ya no viajo")
+
+
+def test_no_se_puede_hacer_check_out_sin_check_in():
+    """La salida solo se registra si el huesped realmente entro."""
+    hoy = date.today()
+    reserva = Reserva(_cliente_demo(), hoy + timedelta(days=1),
+                      hoy + timedelta(days=3), adultos=2)
+    reserva.agregar_habitacion(HabitacionEstandar("113", 1, Decimal("50.00")))
+    reserva.confirmar()
+
+    # Confirmada pero sin check-in: no hay salida que registrar
+    with pytest.raises(TransicionInvalidaError):
+        reserva.registrar_check_out()
+
+
 
 
 # ===========================================================================
