@@ -88,6 +88,20 @@ h3 { font-size: var(--au-txt-xl); }
 .navbar-aurora .nav-link:hover,
 .navbar-aurora .nav-link.activo { color: #fff; text-decoration: underline; }
 
+/* Separa el catalogo publico de las vistas de gestion en la barra del personal.
+   En escritorio es una linea vertical; apilado en movil, una linea horizontal. */
+.nav-separador {
+  border-top: 1px solid rgba(255, 255, 255, .25);
+  margin: var(--au-e1) 0;
+}
+@media (min-width: 992px) {
+  .nav-separador {
+    border-top: 0;
+    border-left: 1px solid rgba(255, 255, 255, .25);
+    margin: .35rem var(--au-e1);
+  }
+}
+
 /* Grupo de sesion: "Crear cuenta" e "Iniciar sesion" necesitan aire entre si,
    sobre todo porque el segundo es un boton y el primero un enlace. */
 .nav-sesion { gap: var(--au-e1); }
