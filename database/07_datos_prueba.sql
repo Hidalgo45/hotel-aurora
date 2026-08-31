@@ -12,7 +12,7 @@
 INSERT INTO rol (nombre, descripcion) VALUES
     ('ADMIN',     'Administrador del sistema: acceso total y reportes'),
     ('RECEPCION', 'Recepcionista: gestiona reservas, check-in y check-out'),
-    ('CLIENTE',   'Huesped: consulta disponibilidad y reserva en linea');
+    ('CLIENTE',   'Huésped: consulta disponibilidad y reserva en línea');
 
 -- ----------------------------------------------------------------------------
 -- 2. USUARIOS DE DEMOSTRACION
@@ -63,11 +63,11 @@ INSERT INTO cliente (id_cliente, fecha_nacimiento, ciudad, pais) VALUES
 -- 3. TIPOS DE HABITACION
 -- ----------------------------------------------------------------------------
 INSERT INTO tipo_habitacion (codigo, nombre, descripcion, capacidad_max, tarifa_base, imagen) VALUES
-    ('EST', 'Estandar',
-     'Habitacion comoda con cama matrimonial, escritorio y bano privado. Ideal para viajes cortos.',
+    ('EST', 'Estándar',
+     'Habitación cómoda con cama matrimonial, escritorio y baño privado. Ideal para viajes cortos.',
      2, 45.00, 'estandar.jpg'),
     ('FAM', 'Familiar',
-     'Amplia habitacion con cama matrimonial y camas adicionales. Pensada para viajar en familia.',
+     'Amplia habitación con cama matrimonial y camas adicionales. Pensada para viajar en familia.',
      5, 65.00, 'familiar.jpg'),
     ('SUI', 'Suite',
      'Suite con sala independiente, jacuzzi, minibar y desayuno buffet incluido.',
@@ -100,13 +100,17 @@ INSERT INTO temporada (nombre, fecha_inicio, fecha_fin, factor) VALUES
 -- ----------------------------------------------------------------------------
 -- 6. CATALOGO DE SERVICIOS
 -- ----------------------------------------------------------------------------
-INSERT INTO servicio (nombre, descripcion, precio, modo_cobro) VALUES
-    ('Desayuno buffet',      'Desayuno completo servido de 06:30 a 10:00',        8.50,  'POR_NOCHE'),
-    ('Parqueadero cubierto', 'Espacio privado en el subsuelo del hotel',          5.00,  'POR_NOCHE'),
-    ('Traslado aeropuerto',  'Transporte privado desde o hacia el aeropuerto',   25.00,  'POR_UNIDAD'),
-    ('Lavanderia express',   'Servicio de lavado y planchado en 6 horas',        12.00,  'POR_UNIDAD'),
-    ('Tour centro historico','Recorrido guiado de medio dia por el centro',      30.00,  'POR_UNIDAD'),
-    ('Cena romantica',       'Cena de tres tiempos servida en la habitacion',    45.00,  'POR_UNIDAD');
+-- El parqueadero pasa a ser un beneficio incluido en la tarifa (ver
+-- Habitacion.servicios_incluidos), por eso no se ofrece como servicio pagado.
+-- Los servicios retirados se dejan como filas inactivas y no se borran:
+-- hay reservas historicas que los referencian y los reportes los necesitan.
+INSERT INTO servicio (nombre, descripcion, precio, modo_cobro, activo) VALUES
+    ('Desayuno buffet',      'Desayuno completo servido de 06:30 a 10:00',        8.50,  'POR_NOCHE',  TRUE),
+    ('Parqueadero cubierto', 'Espacio privado en el subsuelo del hotel',          5.00,  'POR_NOCHE',  FALSE),
+    ('Traslado aeropuerto',  'Transporte privado desde o hacia el aeropuerto',   25.00,  'POR_UNIDAD', TRUE),
+    ('Lavandería express',   'Servicio de lavado y planchado en 6 horas',        12.00,  'POR_UNIDAD', TRUE),
+    ('Tour centro histórico','Recorrido guiado de medio día por el centro',      30.00,  'POR_UNIDAD', FALSE),
+    ('Cena romántica',       'Cena de tres tiempos servida en la habitación',    45.00,  'POR_UNIDAD', FALSE);
 
 -- ----------------------------------------------------------------------------
 -- 7. HISTORIAL DE RESERVAS

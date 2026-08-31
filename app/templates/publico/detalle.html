@@ -4,7 +4,7 @@
 {% block contenido %}
 <div class="container py-4">
 
-  <nav aria-label="Ruta de navegacion" class="mb-3">
+  <nav aria-label="Ruta de navegación" class="mb-3">
     <ol class="breadcrumb small">
       <li class="breadcrumb-item"><a href="{{ url_for('publico.home') }}">Inicio</a></li>
       <li class="breadcrumb-item"><a href="{{ url_for('publico.catalogo') }}">Habitaciones</a></li>
@@ -22,7 +22,7 @@
             <div>
               <h1 class="h3 mb-1">{{ h.tipo }} {{ h.numero }}</h1>
               <p class="text-suave mb-0">
-                Piso {{ h.piso }} · hasta {{ h.capacidad_max }} huespedes
+                Piso {{ h.piso }} · hasta {{ h.capacidad_max }} huéspedes
               </p>
             </div>
             <span class="estado estado-{{ h.estado }}">{{ h.estado | title }}</span>
@@ -76,7 +76,7 @@
             <label for="checkout" class="form-label">Salida</label>
             <input type="date" class="form-control" id="checkout" name="checkout"
                    value="{{ checkout }}" required>
-            <div class="form-text">La salida debe ser al menos un dia despues.</div>
+            <div class="form-text">La salida debe ser al menos un día despues.</div>
           </div>
 
           <div class="row g-2 mb-3">
@@ -86,7 +86,7 @@
                      value="{{ huespedes }}" min="1" max="10" required>
             </div>
             <div class="col-6">
-              <label for="ninos" class="form-label">Ninos</label>
+              <label for="ninos" class="form-label">Niños</label>
               <input type="number" class="form-control" id="ninos" name="ninos"
                      value="0" min="0" max="10">
             </div>
@@ -128,7 +128,7 @@
             {% else %}
             <a class="btn btn-primary w-100"
                href="{{ url_for('cuenta.login', next=request.full_path) }}">
-              Inicia sesion para reservar
+              Inicia sesión para reservar
             </a>
             <p class="small text-suave mt-2 mb-0 text-center">
               <a href="{{ url_for('cuenta.registro') }}">Crear una cuenta</a>
