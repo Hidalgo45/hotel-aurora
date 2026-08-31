@@ -54,32 +54,80 @@ Cada integrante **lidera** una asignatura pero **aporta commits en las tres áre
 
 ---
 
-## 4. Evidencia de distribución equitativa
+## 4. Cómo quedó repartido el trabajo
 
-Ejecutar la semana previa a la entrega y **pegar la salida aquí abajo**:
+Esta es la salida real del historial al cierre del proyecto:
 
-```bash
+```
 git shortlog -sn --all
-git log --pretty=format:"%h|%an|%ad|%s" --date=short --all > docs/historial_commits.csv
+
+    18  Mateo Hidalgo
+     4  Isaac Carrion
+     3  Valeria Tobar
 ```
 
-**Meta: ningún integrante por debajo del 25 % de los commits.** Si alguien va bajo, se le reasignan tareas *antes* de la entrega, no después.
+En total, 25 commits entre el 30 y el 31 de agosto de 2026. El detalle
+completo, commit por commit, está en `docs/historial_commits.csv`.
 
-### Salida del `git shortlog -sn` (pegar aquí)
+### Por qué el reparto no es parejo
 
-```
-(pendiente — ejecutar antes de la entrega)
-```
+El número de commits no muestra bien cuánto puso cada uno, y preferimos
+explicarlo antes que dejarlo pasar.
+
+Trabajamos casi todo el tiempo en una sola computadora. A Isaac se le dañó
+la suya durante el fin de semana, y buena parte del proyecto salió de
+sesiones en las que estábamos juntos frente a la misma pantalla, unas veces
+en persona y otras conectados por escritorio remoto. En esas sesiones la
+cuenta que quedaba guardada en Git era la del dueño del equipo, no siempre
+la de quien estaba resolviendo el problema.
+
+Donde sí pudimos separarlo, lo separamos. Las capturas de pantalla se
+subieron desde la computadora de Valeria con su propia cuenta, y las pruebas
+del dominio con la de Isaac.
+
+También pasó que el nombre configurado en Git cambió entre sesiones, así que
+Valeria aparecía con tres nombres distintos aunque siempre fuera el mismo
+correo. Lo arreglamos con un archivo `.mailmap`, que le dice a Git que esas
+etiquetas son la misma persona sin tocar los commits.
+
+### Quién se encargó de qué
+
+| Integrante | De qué se hizo cargo |
+|---|---|
+| Mateo Hidalgo | La base de datos completa: el modelo, las restricciones, los disparadores, los procedimientos, los reportes, los respaldos y el envío de correos |
+| Isaac Carrión | La parte de objetos: las clases del dominio, la herencia, el polimorfismo y las pruebas |
+| Valeria Tobar | El diseño de la interfaz, que funcione en celular, los mensajes de error y las pruebas con usuarios |
+
+Cada uno lideró su materia, pero los tres podemos responder por cualquier
+parte del proyecto.
 
 ---
 
-## 5. Registro de Pull Requests
+## 5. Los cambios que entraron por Pull Request
 
-| # | Rama | Autor | Revisor | Qué aporta | Fecha |
-|---|---|---|---|---|---|
-| | | | | | |
-| | | | | | |
-| | | | | | |
+Ninguno de nosotros subió cambios directamente a las ramas principales.
+Todo pasó por una rama aparte y un Pull Request, que es donde queda
+registrado qué se cambió y por qué.
+
+| # | Rama | Entró en | Qué aportó |
+|---|---|---|---|
+| 1 | `feature/ux-ajustes-visuales` | `main` | Arregla las etiquetas del buscador, que salían en blanco sobre fondo blanco |
+| 2 | `feature/ux-capturas` | `develop` | Las capturas de la página en celular, tablet y computador |
+| 3 | `fix/ux-nombres-y-navegacion` | `develop` | Ordena los nombres de las capturas |
+| 4 | `fix/ux-nombres-y-navegacion` | `develop` | Corrige un enlace repetido en el menú y documenta la prueba de respaldo |
+| 5 | `feature/correo-comprobante` | `develop` | El envío del comprobante por correo |
+| 6 | `feature/correo-comprobante` | `develop` | Quita las credenciales que se veían en la pantalla de acceso y corrige la ortografía |
+| 7 | `feature/poo-pruebas` | `develop` | Pruebas de los servicios incluidos y del check-out |
+| 8 | `feature/poo-cobertura` | `develop` | Más pruebas: fechas, servicios y estado de las habitaciones |
+| 9 | `feature/ux-resultados-encuesta` | `develop` | Los resultados de la encuesta y las dos mejoras que salieron de ahí |
+
+Los nueve quedaron fusionados y no dejamos ninguna rama abierta.
+
+**Una equivocación que vale la pena contar:** el primer Pull Request lo
+mandamos a `main` en vez de a `develop`, porque GitHub propone `main` por
+defecto. Lo notamos cuando los cambios no le llegaban a los demás. Después
+de eso cambiamos la rama predeterminada del repositorio a `develop` y no
+volvió a pasar.
 
 ---
 

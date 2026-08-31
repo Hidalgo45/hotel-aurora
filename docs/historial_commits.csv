@@ -1,0 +1,26 @@
+c36972c|Hidalgo45|2026-08-31|chore(infra): unifica las identidades del equipo con .mailmap
+bd34bb2|VALERI_TOBAR|2026-08-31|Merge pull request #9 from Hidalgo45/feature/ux-resultados-encuesta
+b2941da|astro-nauta1|2026-08-31|docs(ux): resultados de la encuesta y las dos mejoras que motivaron
+c2627ab|iacarrion|2026-08-31|Merge pull request #8 from Hidalgo45/feature/poo-cobertura
+b03f693|iacarrion|2026-08-31|test(poo): amplia la cobertura del dominio a fechas, servicios y estado
+11d29e3|iacarrion|2026-08-31|Merge pull request #7 from Hidalgo45/feature/poo-pruebas
+954f715|iacarrion|2026-08-31|test(poo): cubre servicios incluidos por tipo y transicion de check-out
+8eab619|Hidalgo45|2026-08-31|Merge branch 'docs/encuesta-formulario' into develop
+1a51542|Hidalgo45|2026-08-31|feat(infra): modo publico para las pruebas de usabilidad
+99c6dc1|Hidalgo45|2026-08-31|docs(ux): agrega el generador del formulario de la encuesta
+061f80e|Hidalgo45|2026-08-31|Merge pull request #6 from Hidalgo45/feature/correo-comprobante
+baebeee|Hidalgo45|2026-08-31|feat(negocio): el parqueadero pasa a estar incluido y se reduce el catalogo de servicios
+e8c6cad|Hidalgo45|2026-08-31|fix(ux): retira las credenciales de la pantalla de acceso y corrige la ortografia
+4df441e|Hidalgo45|2026-08-31|Merge pull request #5 from Hidalgo45/feature/correo-comprobante
+64b4809|Hidalgo45|2026-08-31|feat(correo): envia el comprobante de reserva por correo electronico
+8a93c08|Hidalgo45|2026-08-31|Merge pull request #4 from Hidalgo45/fix/ux-nombres-y-navegacion
+5ed4e35|Hidalgo45|2026-08-31|docs(bd): registra la prueba de respaldo y restauracion
+20cd1ff|Hidalgo45|2026-08-31|Merge pull request #3 from Hidalgo45/fix/ux-nombres-y-navegacion
+88565ef|Hidalgo45|2026-08-31|fix(ux): renombra el enlace duplicado de la barra a "Inventario"
+9afc7b1|Hidalgo45|2026-08-31|docs(ux): normaliza los nombres de las capturas de evidencia
+0558641|Hidalgo45|2026-08-31|Merge pull request #2 from Hidalgo45/feature/ux-capturas
+e0b0199|Valeria Tobar|2026-08-31|docs(ux): agrega capturas responsive de la interfaz
+10938b7|Hidalgo45|2026-08-31|Merge pull request #1 from Hidalgo45/feature/ux-ajustes-visuales
+a241e55|Hidalgo45|2026-08-31|fix(ux): corrige etiquetas invisibles del buscador y mejora la home
+213a3e8|Hidalgo45|2026-08-30|docs(infra): agrega diagrama E-R y diagrama de clases en SVG
+ac9de66|Hidalgo45|2026-08-30|chore(infra): estructura inicial del sistema Hotel Aurora

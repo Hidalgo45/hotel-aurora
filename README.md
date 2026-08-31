@@ -1,15 +1,28 @@
 # Hotel Aurora — Sistema de Reservas y Gestión Hotelera
 
 Proyecto Integrador de segundo nivel · PUCE TEC
-Asignaturas integradas: **Programación Orientada a Objetos**, **Base de Datos I** y **Desarrollo Web Front End (UX/UI)**.
+Mateo Hidalgo · Isaac Carrión · Valeria Tobar
+
+Este proyecto junta lo que vimos en tres materias: Programación Orientada a
+Objetos, Base de Datos I y Desarrollo Web Front End.
 
 ---
 
 ## 1. El problema
 
-El Hotel Aurora administra sus 28 habitaciones con un cuaderno y una hoja de cálculo compartida. Eso produce tres problemas medibles: **sobreventa** de habitaciones en feriados, imposibilidad de conocer la ocupación real del mes y tarifas de temporada aplicadas a criterio de cada recepcionista.
+El Hotel Aurora tiene 28 habitaciones y las maneja con un cuaderno y una hoja
+de cálculo compartida. Eso les trae tres problemas: a veces venden la misma
+habitación dos veces, no saben cuántas noches llenaron realmente en el mes, y
+el precio de temporada alta lo aplica cada recepcionista como le parece.
 
-Aurora digitaliza el ciclo completo —consulta de disponibilidad, reserva, confirmación, check-in, check-out y reportes gerenciales— y hace la sobreventa **estructuralmente imposible**: la restricción `EXCLUDE USING gist` sobre un `daterange` impide que PostgreSQL acepte dos reservas cruzadas de la misma habitación, incluso si se piden en el mismo instante.
+Nuestro sistema cubre todo el recorrido: consultar disponibilidad, reservar,
+confirmar, registrar la entrada y la salida, y sacar reportes para la gerencia.
+
+Lo que más nos interesaba resolver era la doble venta. No quisimos que fuera
+una validación más del programa, porque esas se pueden saltar. Lo pusimos en
+la base de datos: cada habitación guarda el rango de fechas que tiene ocupado,
+y PostgreSQL rechaza cualquier reserva que se cruce con otra. Aunque dos
+personas la pidan en el mismo segundo, solo una pasa.
 
 ---
 
@@ -33,7 +46,9 @@ Abrir el archivo `.env` y escribir en `DB_PASSWORD` la misma contraseña con la 
 DB_PASSWORD=tu_contrasena_de_postgres
 ```
 
-> El archivo `.env` está en `.gitignore` y **nunca** se sube al repositorio. Lo que se versiona es `.env.example`, sin credenciales.
+> El archivo `.env` guarda la contraseña, así que no se sube al repositorio.
+> Lo que sí se sube es `.env.example`, que tiene los mismos campos pero vacíos
+> para que cada uno ponga los suyos.
 
 ### 3.2 Crear la base de datos y cargar los datos
 
@@ -41,7 +56,8 @@ DB_PASSWORD=tu_contrasena_de_postgres
 .venv\Scripts\python.exe setup_db.py
 ```
 
-El instalador crea la base `hotel_aurora` si no existe y ejecuta los siete scripts en orden. Se puede volver a correr las veces que haga falta: reconstruye todo desde cero.
+Ese comando crea la base `hotel_aurora` y corre los siete scripts en orden. Se
+puede repetir cuantas veces haga falta, porque reconstruye todo desde cero.
 
 ### 3.3 Levantar la aplicación
 
@@ -51,7 +67,7 @@ El instalador crea la base `hotel_aurora` si no existe y ejecuta los siete scrip
 
 Abrir <http://127.0.0.1:5000>
 
-### 3.4 Si el entorno virtual no existe todavía
+### 3.4 Si todavía no existe el entorno virtual
 
 ```bash
 python -m venv .venv
@@ -102,8 +118,10 @@ hotel-aurora/
 │   ├── diagrama_clases.svg           Diagrama UML de clases (criterio 3.1)
 │   ├── _diagramas.html               Fuente Mermaid para regenerar ambos
 │   ├── _servidor_diagramas.py        Servidor temporal que los exporta a SVG
-│   ├── bitacora_git.md · encuesta_usabilidad.md
-│   └── evidencias_ux/                Capturas responsive y resultados SUS
+│   ├── manual_usuario.md             Cómo se usa el sistema, por tipo de usuario
+│   ├── bitacora_git.md               Cómo nos repartimos el trabajo
+│   ├── encuesta_usabilidad.md        La encuesta y sus resultados
+│   └── evidencias_ux/                Capturas, respuestas e informe de usabilidad
 ├── tests/                Pruebas del dominio (no requieren base de datos)
 ├── setup_db.py           Instalador de la base
 └── run.py                Punto de entrada
@@ -143,13 +161,13 @@ Abrir <http://127.0.0.1:8899/docs/_diagramas.html>, esperar a que la consola del
 | 1.2 Restricciones, triggers y procedimientos | 3 | `database/02_constraints.sql`, `03_triggers.sql`, `04_procedures.sql` |
 | 1.4 Dos reportes complejos | 2 | `database/05_reportes.sql` · vista `/admin/reportes` |
 | 1.5 Seguridad, calidad y respaldos | 2 | `database/06_seguridad.sql` · `database/backup/` |
-| 2.1 Responsive y mensajes de error | 4 | `app/static/css/aurora.css` · `docs/evidencias_ux/` |
+| 2.1 Responsive y mensajes de error | 4 | `docs/evidencias_ux/` (capturas, encuesta e informe) |
 | 2.3 Funcionalidades completas | 3 | Este README + prototipo funcionando |
 | 2.4 Git colaborativo | 3 | Ramas, Pull Requests y `docs/bitacora_git.md` |
 | 3.1 Diagrama de clases | 3 | `docs/diagrama_clases.svg` |
 | 3.2 Clases que representan el dominio | 2 | `app/dominio/` + `tests/` en verde |
 | 3.3 Encapsulamiento, herencia, polimorfismo | 3 | `app/dominio/habitaciones.py` |
-| 3.4 Organización y documentación | 2 | Docstrings, type hints y este README |
+| 3.4 Organización y documentación | 2 | Docstrings, este README y `docs/manual_usuario.md` |
 
 ---
 
@@ -160,13 +178,17 @@ Cada regla de negocio se implementa **tres veces**, y eso es deliberado:
 | Regla | Navegador | Python (POO) | PostgreSQL |
 |---|---|---|---|
 | Salida posterior a entrada | `min` dinámico en el `input date` | `Reserva.__init__` | `ck_reserva_fechas` |
-| No reservar en el pasado | `min="hoy"` | Constructor de `Reserva` | `RES-001` en el procedimiento |
+| No reservar en el pasado | `min="hoy"` | `Reserva.validar_fecha_inicio()` | `RES-001` en el procedimiento |
 | Huéspedes ≤ capacidad | Máximo del `select` | `Reserva.confirmar()` | `RES-004` en el procedimiento |
 | Sin solapamiento de fechas | Calendario con días ocupados | Consulta previa de disponibilidad | `EXCLUDE ex_habitacion_ocupada` |
 | Cédula de 10 dígitos | `pattern="[0-9]{10}"` | Validador del formulario | `ck_usuario_cedula` |
 | Contraseña nunca en texto plano | Solo se envía por el formulario | Hash antes de guardar | `SEG-001` en `trg_usuario_normaliza` |
 
-La capa 1 da respuesta inmediata pero se puede saltar. La capa 2 concentra la regla y produce el mensaje que lee la persona. La capa 3 es la única que resiste un acceso directo por pgAdmin o dos usuarios simultáneos.
+Lo hicimos así porque cada capa cubre algo distinto. La del navegador avisa al
+instante mientras la persona escribe, pero se puede desactivar. La de Python es
+donde vive la regla de verdad y de donde sale el mensaje que se lee en pantalla.
+Y la de la base es la única que aguanta si alguien entra directo por pgAdmin o
+si dos personas hacen lo mismo al mismo tiempo.
 
 ---
 
@@ -178,7 +200,12 @@ La capa 1 da respuesta inmediata pero se puede saltar. La capa 2 concentra la re
 | Isaac Carreon | Programación Orientada a Objetos | Blueprints y datos de prueba |
 | Valeria Tobar | Desarrollo Web Front End (UX/UI) | Plantillas Jinja y documentación |
 
-Cada integrante lidera una asignatura pero aporta commits en las tres áreas: cualquiera del equipo debe poder responder sobre cualquier parte del proyecto.
+Cada uno se hizo cargo de una materia, pero los tres trabajamos en las tres
+partes. La idea era que cualquiera pudiera explicar cualquier pedazo del
+proyecto, no solo el suyo.
+
+En `docs/bitacora_git.md` está el detalle de cómo nos repartimos el trabajo y
+por qué el conteo de commits no quedó parejo.
 
 ---
 
