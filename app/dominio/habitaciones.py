@@ -234,11 +234,20 @@ class FabricaHabitaciones:
     @classmethod
     def desde_fila(cls, fila: dict) -> Habitacion:
         """Construye la habitacion a partir de una fila de la consulta SQL."""
-        return cls.crear(
-            fila["codigo"],
-            numero=fila["numero"],
-            piso=fila["piso"],
-            tarifa_base=fila["tarifa_base"],
-            id_habitacion=fila["id_habitacion"],
-            estado=fila["estado"],
-        )
+        datos = {
+            "numero": fila["numero"],
+            "piso": fila["piso"],
+            "tarifa_base": fila["tarifa_base"],
+            "id_habitacion": fila["id_habitacion"],
+            "estado": fila["estado"],
+        }
+
+        # La capacidad la define el tipo de habitacion en la base de datos.
+        # En la familiar esa capacidad se compone de la cama matrimonial mas
+        # las camas adicionales, asi que se derivan de ahi. Sin esto el objeto
+        # usaba el valor por defecto y el sistema admitia menos huespedes de
+        # los que la ficha de la habitacion anunciaba.
+        if fila["codigo"] == "FAM" and fila.get("capacidad_max"):
+            datos["camas_extra"] = max(0, int(fila["capacidad_max"]) - 2)
+
+        return cls.crear(fila["codigo"], **datos)

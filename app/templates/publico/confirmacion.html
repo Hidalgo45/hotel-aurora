@@ -108,38 +108,50 @@
         </div>
       </div>
 
-      <div class="d-flex flex-wrap gap-2 mt-4 no-imprimir">
-        <button class="btn btn-outline-primary" onclick="window.print()">
-          Imprimir comprobante
-        </button>
+      {# Una sola accion principal; el resto en un segundo nivel mas discreto
+         para que la pantalla no parezca una fila de botones iguales. #}
+      <div class="acciones no-imprimir">
+
+        <div class="acciones-principal">
+          {% if usuario_actual and usuario_actual.rol == 'CLIENTE' %}
+          <a class="btn btn-primary" href="{{ url_for('cuenta.mis_reservas') }}">
+            Ver mis reservas
+          </a>
+          {% endif %}
+          <a class="btn btn-outline-primary" href="{{ url_for('publico.catalogo') }}">
+            Reservar otra habitación
+          </a>
+        </div>
+
+        <div class="acciones-secundaria">
+          <button type="button" class="btn-discreto" onclick="window.print()">
+            Imprimir
+          </button>
+
+          {% if usuario_actual %}
+          <form method="post" class="d-inline"
+                action="{{ url_for('publico.reenviar_comprobante', codigo=r.codigo) }}">
+            <button type="submit" class="btn-discreto"
+                    title="Se enviará a {{ r.email }}">
+              Reenviar comprobante
+            </button>
+          </form>
+          {% endif %}
+
+          {% if usuario_actual and r.estado in ['PENDIENTE', 'CONFIRMADA'] %}
+          <form method="post" class="d-inline ms-auto"
+                action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
+                data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿Confirmas?">
+            <input type="hidden" name="motivo" value="Cancelada por el huésped">
+            <button type="submit" class="btn-discreto btn-discreto-peligro">
+              Cancelar reserva
+            </button>
+          </form>
+          {% endif %}
+        </div>
 
         {% if usuario_actual %}
-        <form method="post" class="d-inline"
-              action="{{ url_for('publico.reenviar_comprobante', codigo=r.codigo) }}">
-          <button type="submit" class="btn btn-outline-primary">
-            Enviar comprobante a {{ r.email }}
-          </button>
-        </form>
-        {% endif %}
-
-        {% if usuario_actual and usuario_actual.rol == 'CLIENTE' %}
-        <a class="btn btn-primary"
-           href="{{ url_for('cuenta.mis_reservas') }}">
-          Ver todas mis reservas
-        </a>
-        {% endif %}
-
-        <a class="btn btn-outline-primary" href="{{ url_for('publico.catalogo') }}">
-          Reservar otra habitación
-        </a>
-
-        {% if usuario_actual and r.estado in ['PENDIENTE', 'CONFIRMADA'] %}
-        <form method="post" class="ms-auto"
-              action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
-              data-confirmar="Se cancelará la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. ¿Confirmas?">
-          <input type="hidden" name="motivo" value="Cancelada por el huésped">
-          <button type="submit" class="btn btn-outline-danger">Cancelar reserva</button>
-        </form>
+        <p class="acciones-nota">El comprobante se envía a {{ r.email }}</p>
         {% endif %}
       </div>
 

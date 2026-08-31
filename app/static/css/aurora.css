@@ -304,3 +304,74 @@ table { font-variant-numeric: tabular-nums; }
   body { background: #fff; }
   .card { box-shadow: none; border: 1px solid #999; }
 }
+
+/* ==========================================================================
+   ACCIONES DE LA CONFIRMACION
+   Una accion principal destacada y el resto en un segundo nivel discreto,
+   para que la pantalla no termine en una fila de botones del mismo peso.
+   ========================================================================== */
+.acciones {
+  margin-top: var(--au-e4);
+  padding-top: var(--au-e3);
+  border-top: 1px solid var(--au-borde);
+}
+
+.acciones-principal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--au-e1);
+  margin-bottom: var(--au-e2);
+}
+
+/* Segundo nivel: se leen como enlaces, no compiten con el boton principal */
+.acciones-secundaria {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--au-e3);
+}
+
+.btn-discreto {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--au-txt-sm);
+  font-weight: 600;
+  color: var(--au-primario);
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.btn-discreto:hover {
+  border-bottom-color: currentColor;
+}
+.btn-discreto-peligro {
+  color: var(--au-error);
+}
+
+/* En movil los enlaces sueltos son dificiles de acertar con el dedo, asi que
+   ahi recuperan area tactil (WCAG 2.5.5 pide 44 px como minimo). */
+@media (max-width: 767.98px) {
+  .acciones-principal .btn { width: 100%; }
+  .acciones-secundaria {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .acciones-secundaria form { width: 100%; }
+  .btn-discreto {
+    display: block;
+    width: 100%;
+    text-align: left;
+    min-height: 44px;
+    line-height: 44px;
+    border-bottom: 1px solid var(--au-borde);
+  }
+}
+
+.acciones-nota {
+  margin: var(--au-e2) 0 0;
+  font-size: var(--au-txt-sm);
+  color: var(--au-texto-suave);
+}
