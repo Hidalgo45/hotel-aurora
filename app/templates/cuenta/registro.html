@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block titulo %}Crear cuenta - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-5" style="max-width: 640px;">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="h4 mb-1">Crear cuenta</h1>
+      <p class="text-suave small mb-4">
+        Solo pedimos lo necesario para emitir tu reserva.
+      </p>
+
+      <form method="post" novalidate>
+        <div class="row g-3">
+
+          <div class="col-12 col-sm-6">
+            <label for="cedula" class="form-label">Cedula</label>
+            <input type="text" class="form-control" id="cedula" name="cedula"
+                   value="{{ datos.cedula or '' }}"
+                   pattern="[0-9]{10}" maxlength="10" inputmode="numeric" required>
+            <div class="form-text">10 digitos, sin guiones.</div>
+            <div class="invalid-feedback">La cedula debe tener 10 digitos.</div>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+            <input type="date" class="form-control" id="fecha_nacimiento"
+                   name="fecha_nacimiento" required>
+            <div class="form-text">Debes ser mayor de 18 anos.</div>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label for="nombres" class="form-label">Nombres</label>
+            <input type="text" class="form-control" id="nombres" name="nombres"
+                   value="{{ datos.nombres or '' }}" minlength="2" required>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label for="apellidos" class="form-label">Apellidos</label>
+            <input type="text" class="form-control" id="apellidos" name="apellidos"
+                   value="{{ datos.apellidos or '' }}" minlength="2" required>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label for="email" class="form-label">Correo electronico</label>
+            <input type="email" class="form-control" id="email" name="email"
+                   value="{{ datos.email or '' }}" autocomplete="email" required>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label for="telefono" class="form-label">Telefono</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono"
+                   value="{{ datos.telefono or '' }}"
+                   pattern="[0-9+ -]{7,15}">
+            <div class="form-text">Opcional. Entre 7 y 15 digitos.</div>
+          </div>
+
+          <div class="col-12">
+            <label for="ciudad" class="form-label">Ciudad</label>
+            <input type="text" class="form-control" id="ciudad" name="ciudad"
+                   value="{{ datos.ciudad or '' }}">
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label for="password" class="form-label">Contrasena</label>
+            <input type="password" class="form-control" id="password"
+                   name="password" minlength="8" autocomplete="new-password" required>
+            <div class="form-text">Minimo 8 caracteres.</div>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label for="password2" class="form-label">Repetir contrasena</label>
+            <input type="password" class="form-control" id="password2"
+                   name="password2" minlength="8" autocomplete="new-password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-4">Crear cuenta</button>
+      </form>
+
+      <p class="text-center small mt-4 mb-0">
+        Ya tienes cuenta? <a href="{{ url_for('cuenta.login') }}">Inicia sesion</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

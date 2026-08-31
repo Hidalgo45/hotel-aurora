@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block titulo %}Reportes - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-4">
+
+  <h1 class="h3 mb-1">Reportes gerenciales</h1>
+  <p class="text-suave mb-4">
+    Las dos consultas se ejecutan en PostgreSQL como vistas
+    (<code>v_reporte_ocupacion</code> y <code>v_reporte_clientes</code>).
+  </p>
+
+  {# ================= REPORTE 1 ================= #}
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-1">
+        <h2 class="h5 mb-0">Reporte 1 · Ocupacion e ingresos por tipo y mes</h2>
+        <a class="btn btn-sm btn-outline-primary"
+           href="{{ url_for('admin.exportar', nombre='ocupacion') }}">Exportar CSV</a>
+      </div>
+      <p class="small text-suave mb-3">
+        Cruza reserva, reserva_habitacion, habitacion y tipo_habitacion.
+        Expande cada estadia noche por noche y la compara con el inventario
+        disponible del mes.
+      </p>
+
+      <div class="tabla-scroll">
+        <table class="table table-sm align-middle tabla-adaptable mb-0">
+          <thead>
+            <tr>
+              <th>Tipo</th><th>Periodo</th>
+              <th class="text-end">Noches vendidas</th>
+              <th class="text-end">Disponibles</th>
+              <th>Ocupacion</th>
+              <th class="text-end">Ingresos</th>
+              <th class="text-end">Tarifa media</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in ocupacion %}
+            <tr>
+              <td data-etiqueta="Tipo">{{ o.tipo }}</td>
+              <td data-etiqueta="Periodo">{{ o.periodo }}</td>
+              <td data-etiqueta="Noches vendidas" class="text-end">{{ o.noches_vendidas }}</td>
+              <td data-etiqueta="Disponibles" class="text-end">{{ o.noches_disponibles }}</td>
+              <td data-etiqueta="Ocupacion" style="min-width:130px;">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="barra flex-grow-1">
+                    <span style="width: {{ o.ocupacion_pct or 0 }}%"></span>
+                  </div>
+                  <span class="small">{{ o.ocupacion_pct or 0 }}%</span>
+                </div>
+              </td>
+              <td data-etiqueta="Ingresos" class="text-end precio">{{ o.ingresos_usd | dinero }}</td>
+              <td data-etiqueta="Tarifa media" class="text-end">
+                {{ o.tarifa_promedio | dinero if o.tarifa_promedio else '-' }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {# ================= REPORTE 2 ================= #}
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-1">
+        <h2 class="h5 mb-0">Reporte 2 · Ranking de clientes por valor generado</h2>
+        <a class="btn btn-sm btn-outline-primary"
+           href="{{ url_for('admin.exportar', nombre='clientes') }}">Exportar CSV</a>
+      </div>
+      <p class="small text-suave mb-3">
+        Usa la funcion de ventana <code>RANK()</code>, subconsultas correlacionadas
+        y <code>HAVING</code> sobre seis tablas para calcular valor total,
+        ticket promedio y saldo pendiente.
+      </p>
+
+      <div class="tabla-scroll">
+        <table class="table table-sm align-middle tabla-adaptable mb-0">
+          <thead>
+            <tr>
+              <th>#</th><th>Cliente</th><th>Ciudad</th>
+              <th class="text-end">Reservas</th><th class="text-end">Noches</th>
+              <th class="text-end">Alojamiento</th><th class="text-end">Servicios</th>
+              <th class="text-end">Valor total</th><th class="text-end">Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in clientes %}
+            <tr>
+              <td data-etiqueta="#">{{ c.ranking }}</td>
+              <td data-etiqueta="Cliente">
+                {{ c.cliente }}
+                <span class="d-block small text-suave">{{ c.email }}</span>
+              </td>
+              <td data-etiqueta="Ciudad">{{ c.ciudad }}</td>
+              <td data-etiqueta="Reservas" class="text-end">{{ c.reservas }}</td>
+              <td data-etiqueta="Noches" class="text-end">{{ c.noches_totales }}</td>
+              <td data-etiqueta="Alojamiento" class="text-end">{{ c.alojamiento_usd | dinero }}</td>
+              <td data-etiqueta="Servicios" class="text-end">{{ c.servicios_usd | dinero }}</td>
+              <td data-etiqueta="Valor total" class="text-end precio">{{ c.valor_total | dinero }}</td>
+              <td data-etiqueta="Saldo" class="text-end">{{ c.saldo_pendiente | dinero }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {# ================= CALIDAD DE DATOS ================= #}
+  <div class="card">
+    <div class="card-body">
+      <h2 class="h5 mb-1">Auditoria de calidad de datos</h2>
+      <p class="small text-suave mb-3">
+        Vista <code>v_calidad_datos</code>. Cualquier valor distinto de cero
+        indica una inconsistencia que debe revisarse.
+      </p>
+
+      <div class="tabla-scroll">
+        <table class="table table-sm align-middle tabla-adaptable mb-0">
+          <thead><tr><th>Incidencia</th><th class="text-end">Casos</th></tr></thead>
+          <tbody>
+            {% for c in calidad %}
+            <tr>
+              <td data-etiqueta="Incidencia">{{ c.incidencia }}</td>
+              <td data-etiqueta="Casos" class="text-end">
+                <span class="estado {{ 'estado-DISPONIBLE' if c.casos == 0 else 'estado-MANTENIMIENTO' }}">
+                  {{ c.casos }}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

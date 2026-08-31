@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block titulo %}{{ h.tipo }} {{ h.numero }} - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-4">
+
+  <nav aria-label="Ruta de navegacion" class="mb-3">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('publico.home') }}">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('publico.catalogo') }}">Habitaciones</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ h.tipo }} {{ h.numero }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+
+    {# ---- Informacion: ocupa todo en movil, 8/12 en escritorio --------- #}
+    <div class="col-12 col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+            <div>
+              <h1 class="h3 mb-1">{{ h.tipo }} {{ h.numero }}</h1>
+              <p class="text-suave mb-0">
+                Piso {{ h.piso }} · hasta {{ h.capacidad_max }} huespedes
+              </p>
+            </div>
+            <span class="estado estado-{{ h.estado }}">{{ h.estado | title }}</span>
+          </div>
+
+          <p>{{ h.descripcion }}</p>
+
+          <h2 class="h6 text-uppercase small mt-4">Incluido sin costo</h2>
+          <ul class="row list-unstyled g-2">
+            {% for s in servicios_incluidos %}
+            <li class="col-12 col-sm-6 text-suave">· {{ s }}</li>
+            {% endfor %}
+          </ul>
+
+          {% if ocupadas %}
+          <h2 class="h6 text-uppercase small mt-4">Fechas ya reservadas</h2>
+          <div class="d-flex flex-wrap gap-2">
+            {% for o in ocupadas %}
+            <span class="estado estado-RESERVADA">
+              {{ o.desde | fecha }} a {{ o.hasta | fecha }}
+            </span>
+            {% endfor %}
+          </div>
+          <p class="small text-suave mt-2 mb-0">
+            Si tus fechas se cruzan con alguna de estas, el sistema no permitira
+            confirmar la reserva.
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {# ---- Formulario de reserva: sticky en escritorio ------------------ #}
+    <div class="col-12 col-lg-4">
+      <form class="card resumen-lateral" method="post"
+            action="{{ url_for('publico.reservar') }}"
+            data-form-reserva data-capacidad="{{ h.capacidad_max }}">
+
+        <div class="card-body">
+          <h2 class="h5 mb-3">Completa tu reserva</h2>
+
+          <input type="hidden" name="id_habitacion" value="{{ h.id_habitacion }}">
+
+          <div class="mb-3">
+            <label for="checkin" class="form-label">Entrada</label>
+            <input type="date" class="form-control" id="checkin" name="checkin"
+                   value="{{ checkin }}" min="{{ hoy }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="checkout" class="form-label">Salida</label>
+            <input type="date" class="form-control" id="checkout" name="checkout"
+                   value="{{ checkout }}" required>
+            <div class="form-text">La salida debe ser al menos un dia despues.</div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label for="adultos" class="form-label">Adultos</label>
+              <input type="number" class="form-control" id="adultos" name="adultos"
+                     value="{{ huespedes }}" min="1" max="10" required>
+            </div>
+            <div class="col-6">
+              <label for="ninos" class="form-label">Ninos</label>
+              <input type="number" class="form-control" id="ninos" name="ninos"
+                     value="0" min="0" max="10">
+            </div>
+          </div>
+
+          {# Aviso de capacidad: aparece antes de enviar el formulario #}
+          <div class="alert alert-danger py-2 small" data-aviso-capacidad hidden
+               role="alert"></div>
+
+          {% if servicios_extra %}
+          <fieldset class="mb-3">
+            <legend class="form-label fs-6">Servicios adicionales</legend>
+            {% for s in servicios_extra %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="servicios"
+                     value="{{ s.id_servicio }}" id="serv{{ s.id_servicio }}">
+              <label class="form-check-label small" for="serv{{ s.id_servicio }}">
+                {{ s.nombre }} · {{ s.precio | dinero }}
+                {{ 'por noche' if s.modo_cobro == 'POR_NOCHE' else '' }}
+              </label>
+            </div>
+            {% endfor %}
+          </fieldset>
+          {% endif %}
+
+          <div class="resumen-fijo border-top pt-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-suave">Alojamiento</span>
+              <span class="precio">{{ precio_total | dinero }}</span>
+            </div>
+            <p class="small text-suave mb-3" data-noches>
+              {{ noches }} {{ 'noche' if noches == 1 else 'noches' }}
+            </p>
+
+            {% if usuario_actual %}
+            <button type="submit" class="btn btn-primary w-100">
+              Confirmar reserva
+            </button>
+            {% else %}
+            <a class="btn btn-primary w-100"
+               href="{{ url_for('cuenta.login', next=request.full_path) }}">
+              Inicia sesion para reservar
+            </a>
+            <p class="small text-suave mt-2 mb-0 text-center">
+              <a href="{{ url_for('cuenta.registro') }}">Crear una cuenta</a>
+              toma menos de un minuto.
+            </p>
+            {% endif %}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

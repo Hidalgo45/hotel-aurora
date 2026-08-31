@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block titulo %}Gestion de reservas - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-4">
+
+  <h1 class="h3 mb-3">Gestion de reservas</h1>
+
+  <form class="buscador mb-4" method="get">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-5">
+        <label for="q" class="form-label">Buscar</label>
+        <input type="search" class="form-control" id="q" name="q"
+               value="{{ busqueda }}" placeholder="Codigo, nombre o cedula">
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="estado" class="form-label">Estado</label>
+        <select class="form-select" id="estado" name="estado">
+          <option value="">Todos los estados</option>
+          {% for e in ['PENDIENTE','CONFIRMADA','CHECK_IN','CHECK_OUT','CANCELADA','NO_SHOW'] %}
+          <option value="{{ e }}" {% if estado == e %}selected{% endif %}>
+            {{ e | replace('_',' ') | title }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <button class="btn btn-primary w-100">Filtrar</button>
+      </div>
+    </div>
+  </form>
+
+  <p class="text-suave">{{ reservas | length }} reservas encontradas.</p>
+
+  <div class="tabla-scroll">
+    <table class="table align-middle tabla-adaptable">
+      <thead>
+        <tr>
+          <th>Codigo</th><th>Huesped</th><th>Fechas</th>
+          <th>Estado</th><th class="text-end">Total</th>
+          <th class="text-end">Saldo</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reservas %}
+        <tr>
+          <td data-etiqueta="Codigo">
+            <a href="{{ url_for('publico.confirmacion', codigo=r.codigo) }}">{{ r.codigo }}</a>
+          </td>
+          <td data-etiqueta="Huesped">
+            {{ r.cliente }}
+            <span class="d-block small text-suave">{{ r.cedula }}</span>
+          </td>
+          <td data-etiqueta="Fechas">
+            {{ r.fecha_checkin | fecha }} a {{ r.fecha_checkout | fecha }}
+          </td>
+          <td data-etiqueta="Estado">
+            <span class="estado estado-{{ r.estado }}">
+              {{ r.estado | replace('_',' ') | title }}
+            </span>
+          </td>
+          <td data-etiqueta="Total" class="text-end">{{ r.total | dinero }}</td>
+          <td data-etiqueta="Saldo" class="text-end">
+            {{ (r.total - r.pagado) | dinero }}
+          </td>
+          <td data-etiqueta="Acciones">
+            <div class="d-flex flex-wrap gap-1 justify-content-end">
+              {% if r.estado == 'PENDIENTE' %}
+              <form method="post" action="{{ url_for('admin.cambiar_estado', codigo=r.codigo) }}">
+                <input type="hidden" name="estado" value="CONFIRMADA">
+                <button class="btn btn-sm btn-primary">Confirmar</button>
+              </form>
+              {% elif r.estado == 'CONFIRMADA' %}
+              <form method="post" action="{{ url_for('admin.cambiar_estado', codigo=r.codigo) }}">
+                <input type="hidden" name="estado" value="CHECK_IN">
+                <button class="btn btn-sm btn-primary">Check-in</button>
+              </form>
+              {% elif r.estado == 'CHECK_IN' %}
+              <form method="post" action="{{ url_for('admin.cambiar_estado', codigo=r.codigo) }}">
+                <input type="hidden" name="estado" value="CHECK_OUT">
+                <button class="btn btn-sm btn-primary">Check-out</button>
+              </form>
+              {% endif %}
+
+              {% if r.estado in ['PENDIENTE','CONFIRMADA'] %}
+              <form method="post" action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
+                    data-confirmar="Cancelar la reserva {{ r.codigo }}?">
+                <input type="hidden" name="motivo" value="Cancelada en recepcion">
+                <button class="btn btn-sm btn-outline-danger">Cancelar</button>
+              </form>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7">
+            <div class="alert alert-info mb-0" role="status">
+              No hay reservas que coincidan con esa busqueda. Prueba con otro
+              codigo o quita el filtro de estado.
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

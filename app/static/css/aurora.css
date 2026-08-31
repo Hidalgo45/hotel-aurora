@@ -1,0 +1,243 @@
+/* ==========================================================================
+   HOTEL AURORA - Sistema de diseno
+   Un solo lugar define color, tipografia y espaciado. Ninguna plantilla
+   escribe un color suelto: asi se garantiza la consistencia visual.
+   ========================================================================== */
+
+:root {
+  /* --- Color. Contraste verificado contra blanco (WCAG AA) --- */
+  --au-primario:      #0E4C55;   /* 8.9:1  navbar, botones, titulos */
+  --au-primario-osc:  #093840;   /* estado hover */
+  --au-primario-cla:  #DCEAEA;   /* fondos suaves */
+  --au-acento:        #8E6115;   /* 5.1:1  precios y datos destacados */
+  --au-acento-cla:    #F5EBD8;
+
+  --au-fondo:         #F5F6F3;
+  --au-superficie:    #FFFFFF;
+  --au-texto:         #141F24;
+  --au-texto-suave:   #52646A;   /* 7.0:1  texto secundario */
+  --au-borde:         #D8DDD5;
+
+  /* --- Semantica de estado. No se usan como color decorativo --- */
+  --au-exito:  #2C6E49;  --au-exito-bg:  #DEEBE1;
+  --au-alerta: #8A5410;  --au-alerta-bg: #F6E7CF;
+  --au-error:  #9C2B22;  --au-error-bg:  #F5DFDC;
+  --au-info:   #0E4C55;  --au-info-bg:   #DCEAEA;
+
+  /* --- Escala tipografica 1.250 (tercera mayor) --- */
+  --au-txt-sm:   0.875rem;
+  --au-txt-base: 1rem;
+  --au-txt-lg:   1.25rem;
+  --au-txt-xl:   1.563rem;
+  --au-txt-2xl:  1.953rem;
+  --au-txt-3xl:  2.441rem;
+
+  /* --- Espaciado en multiplos de 8 px --- */
+  --au-e1: 0.5rem;  --au-e2: 1rem;  --au-e3: 1.5rem;
+  --au-e4: 2rem;    --au-e5: 3rem;
+
+  --au-radio: 10px;
+  --au-sombra: 0 1px 2px rgba(20, 31, 36, .06),
+               0 8px 24px -14px rgba(20, 31, 36, .25);
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+body {
+  background: var(--au-fondo);
+  color: var(--au-texto);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: var(--au-txt-base);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main { flex: 1 0 auto; }
+
+h1, h2, h3, h4 { color: var(--au-primario); font-weight: 600; }
+h1 { font-size: var(--au-txt-3xl); letter-spacing: -.02em; }
+h2 { font-size: var(--au-txt-2xl); }
+h3 { font-size: var(--au-txt-xl); }
+
+.text-suave { color: var(--au-texto-suave); }
+.precio {
+  color: var(--au-acento);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accesibilidad: el foco del teclado siempre visible (WCAG 2.4.7) */
+:where(a, button, input, select, textarea, .btn):focus-visible {
+  outline: 3px solid var(--au-acento);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   COMPONENTES
+   ========================================================================== */
+.navbar-aurora {
+  background: var(--au-primario);
+  box-shadow: var(--au-sombra);
+}
+.navbar-aurora .navbar-brand { font-weight: 700; letter-spacing: .02em; }
+.navbar-aurora .nav-link { color: rgba(255, 255, 255, .88); font-weight: 500; }
+.navbar-aurora .nav-link:hover,
+.navbar-aurora .nav-link.activo { color: #fff; text-decoration: underline; }
+
+.btn-primary {
+  background: var(--au-primario);
+  border-color: var(--au-primario);
+  font-weight: 600;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--au-primario-osc);
+  border-color: var(--au-primario-osc);
+}
+.btn-outline-primary { color: var(--au-primario); border-color: var(--au-primario); }
+.btn-outline-primary:hover { background: var(--au-primario); }
+
+.card {
+  border: 1px solid var(--au-borde);
+  border-radius: var(--au-radio);
+  box-shadow: var(--au-sombra);
+  background: var(--au-superficie);
+}
+
+.hero {
+  background: linear-gradient(180deg, var(--au-primario) 0%, var(--au-primario-osc) 100%);
+  color: #fff;
+  padding: var(--au-5, 3rem) 0 var(--au-e5);
+}
+.hero h1 { color: #fff; }
+.hero p { color: rgba(255, 255, 255, .9); }
+
+.buscador {
+  background: var(--au-superficie);
+  border-radius: var(--au-radio);
+  box-shadow: var(--au-sombra);
+  padding: var(--au-e3);
+}
+
+/* Etiquetas de estado: el color va acompanado de texto, nunca solo */
+.estado {
+  display: inline-block;
+  padding: .18rem .6rem;
+  border-radius: 999px;
+  font-size: var(--au-txt-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.estado-DISPONIBLE, .estado-CONFIRMADA { background: var(--au-exito-bg);  color: var(--au-exito); }
+.estado-RESERVADA,  .estado-PENDIENTE  { background: var(--au-alerta-bg); color: var(--au-alerta); }
+.estado-OCUPADA,    .estado-CHECK_IN   { background: var(--au-info-bg);   color: var(--au-info); }
+.estado-LIMPIEZA,   .estado-CHECK_OUT  { background: #E8E8E4;             color: var(--au-texto-suave); }
+.estado-MANTENIMIENTO, .estado-CANCELADA, .estado-NO_SHOW {
+  background: var(--au-error-bg); color: var(--au-error);
+}
+
+/* Tarjetas de indicador del tablero */
+.kpi {
+  background: var(--au-superficie);
+  border: 1px solid var(--au-borde);
+  border-left: 4px solid var(--au-acento);
+  border-radius: var(--au-radio);
+  padding: var(--au-e2);
+  height: 100%;
+}
+.kpi .valor {
+  font-size: var(--au-txt-2xl);
+  font-weight: 700;
+  color: var(--au-primario);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.kpi .etiqueta {
+  font-size: var(--au-txt-sm);
+  color: var(--au-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* Barra de ocupacion de los reportes */
+.barra { background: var(--au-borde); border-radius: 999px; height: 8px; overflow: hidden; }
+.barra > span { display: block; height: 100%; background: var(--au-primario); }
+
+table { font-variant-numeric: tabular-nums; }
+.tabla-scroll { overflow-x: auto; }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+/* Movil: 375 - 767 px */
+@media (max-width: 767.98px) {
+
+  h1 { font-size: var(--au-txt-2xl); }
+  h2 { font-size: var(--au-txt-xl); }
+
+  /* Area tactil minima de 44x44 px (WCAG 2.5.5) */
+  .btn, .form-control, .form-select { min-height: 44px; font-size: 1rem; }
+
+  /* El resumen de precio queda fijo al pie mientras se completa la reserva */
+  .resumen-fijo {
+    position: sticky;
+    bottom: 0;
+    background: var(--au-superficie);
+    border-top: 2px solid var(--au-primario);
+    padding: var(--au-e2);
+    margin: 0 -12px;
+    box-shadow: 0 -4px 16px rgba(20, 31, 36, .12);
+    z-index: 10;
+  }
+
+  /* Las tablas se reorganizan como tarjetas: nunca hay scroll horizontal */
+  .tabla-adaptable thead { display: none; }
+  .tabla-adaptable tr {
+    display: block;
+    margin-bottom: var(--au-e2);
+    border: 1px solid var(--au-borde);
+    border-radius: var(--au-radio);
+    padding: var(--au-e1);
+    background: var(--au-superficie);
+  }
+  .tabla-adaptable td {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--au-e2);
+    border: none;
+    padding: .4rem .5rem;
+    text-align: right;
+  }
+  .tabla-adaptable td::before {
+    content: attr(data-etiqueta);
+    font-weight: 600;
+    color: var(--au-texto-suave);
+    text-align: left;
+  }
+}
+
+/* Tablet: 768 - 991 px */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .hero { padding: var(--au-e4) 0; }
+}
+
+/* Escritorio: 1200 px o mas */
+@media (min-width: 1200px) {
+  .resumen-lateral { position: sticky; top: var(--au-e3); }
+}
+
+/* Respeta a quien pidio menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Impresion: el comprobante de reserva debe salir limpio */
+@media print {
+  .navbar-aurora, footer, .no-imprimir { display: none !important; }
+  body { background: #fff; }
+  .card { box-shadow: none; border: 1px solid #999; }
+}
