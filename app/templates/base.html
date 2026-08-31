@@ -38,6 +38,9 @@
         </li>
         {% endif %}
         {% if usuario_actual and usuario_actual.rol in ['ADMIN', 'RECEPCION'] %}
+        {# Separador: a partir de aqui empiezan las vistas de gestion, para que
+           no se confundan con el catalogo publico de arriba. #}
+        <li class="nav-item nav-separador" aria-hidden="true"></li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Tablero</a>
         </li>
@@ -45,7 +48,7 @@
           <a class="nav-link" href="{{ url_for('admin.reservas') }}">Reservas</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('admin.habitaciones') }}">Habitaciones</a>
+          <a class="nav-link" href="{{ url_for('admin.habitaciones') }}">Inventario</a>
         </li>
         {% if usuario_actual.rol == 'ADMIN' %}
         <li class="nav-item">
