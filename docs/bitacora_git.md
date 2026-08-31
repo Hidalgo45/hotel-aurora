@@ -16,7 +16,7 @@
 
 **Reglas del equipo:**
 
-1. Nadie hace `push` directo a `main` ni a `develop`.
+1. El trabajo entra por una rama y un Pull Request, no directo a `main` ni a `develop`. La única excepción fueron las correcciones del último día, que explicamos más abajo.
 2. Todo entra por Pull Request con **un revisor obligatorio distinto del autor**.
 3. Antes de abrir el PR: `pytest -q` en verde.
 4. El PR describe *qué* cambia y *por qué*, no solo qué archivos se tocaron.
@@ -101,13 +101,21 @@ etiquetas son la misma persona sin tocar los commits.
 Cada uno lideró su materia, pero los tres podemos responder por cualquier
 parte del proyecto.
 
+
+**Las excepciones del último día.** Los tres últimos commits entraron
+directamente a `develop`: la unificación de identidades con `.mailmap`, el
+cierre de la documentación y una corrección de la capacidad de las
+habitaciones familiares. Fueron correcciones puntuales hechas la tarde
+anterior a la sustentación, cuando ya trabajábamos sobre el mismo equipo y
+abrir un Pull Request para revisarse uno mismo no aportaba nada. Lo
+anotamos aquí en lugar de disimularlo.
+
 ---
 
 ## 5. Los cambios que entraron por Pull Request
 
-Ninguno de nosotros subió cambios directamente a las ramas principales.
-Todo pasó por una rama aparte y un Pull Request, que es donde queda
-registrado qué se cambió y por qué.
+Casi todo el trabajo pasó por una rama aparte y un Pull Request, que es
+donde queda registrado qué se cambió y por qué.
 
 | # | Rama | Entró en | Qué aportó |
 |---|---|---|---|
