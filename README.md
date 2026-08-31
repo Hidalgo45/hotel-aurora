@@ -174,9 +174,9 @@ La capa 1 da respuesta inmediata pero se puede saltar. La capa 2 concentra la re
 
 | Integrante | Lidera | Aporta también en |
 |---|---|---|
-| *(nombre)* | Base de Datos | Repositorios Python y vista de reportes |
-| *(nombre)* | Programación Orientada a Objetos | Blueprints y datos de prueba |
-| *(nombre)* | Desarrollo Web Front End (UX/UI) | Plantillas Jinja y documentación |
+| Mateo Hidalgo | Base de Datos | Repositorios Python y vista de reportes |
+| Isaac Carreon | Programación Orientada a Objetos | Blueprints y datos de prueba |
+| Valeria Tobar | Desarrollo Web Front End (UX/UI) | Plantillas Jinja y documentación |
 
 Cada integrante lidera una asignatura pero aporta commits en las tres áreas: cualquiera del equipo debe poder responder sobre cualquier parte del proyecto.
 

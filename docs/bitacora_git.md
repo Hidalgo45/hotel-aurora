@@ -48,9 +48,9 @@ Cada integrante **lidera** una asignatura pero **aporta commits en las tres áre
 
 | Integrante | Lidera | Aporta también en | Revisa PRs de |
 |---|---|---|---|
-| *(nombre)* | Base de Datos: DDL, constraints, triggers, procedimientos, reportes, respaldos | Repositorios Python, vista `/admin/reportes` | Integrante C |
-| *(nombre)* | POO: dominio, herencia, polimorfismo, tests, diagrama de clases | Blueprints y formularios, datos de prueba | Integrante A |
-| *(nombre)* | UX/UI: sistema de diseño, responsive, mensajes, encuesta | Plantillas Jinja, clase `Servicio`, documentación | Integrante B |
+| Mateo Hidalgo | Base de Datos: DDL, constraints, triggers, procedimientos, reportes, respaldos | Repositorios Python, vista `/admin/reportes` | Valeria Tobar |
+| Isaac Carreon | POO: dominio, herencia, polimorfismo, tests, diagrama de clases | Blueprints y formularios, datos de prueba | Mateo Hidalgo |
+| Valeria Tobar | UX/UI: sistema de diseño, responsive, mensajes, encuesta | Plantillas Jinja, clase `Servicio`, documentación | Isaac Carreon |
 
 ---
 
