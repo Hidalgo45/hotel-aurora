@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block titulo %}Inventario - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-4">
+
+  <h1 class="h3 mb-1">Inventario de habitaciones</h1>
+  <p class="text-suave mb-4">
+    El estado cambia solo cuando avanza una reserva. Aqui se ajusta a mano solo
+    para limpieza o mantenimiento.
+  </p>
+
+  <div class="row g-3 mb-4">
+    {% for e in resumen %}
+    <div class="col-12 col-md-4">
+      <div class="kpi">
+        <p class="etiqueta mb-1">{{ e.tipo }}</p>
+        <p class="valor mb-1">{{ e.disponibles }}<span class="fs-6 fw-normal text-suave"> / {{ e.total }} libres</span></p>
+        <p class="small text-suave mb-0">
+          {{ e.ocupadas }} ocupadas · {{ e.reservadas }} reservadas ·
+          {{ e.limpieza }} en limpieza
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="tabla-scroll">
+    <table class="table align-middle tabla-adaptable">
+      <thead>
+        <tr>
+          <th>Numero</th><th>Tipo</th><th>Piso</th><th>Capacidad</th>
+          <th class="text-end">Tarifa base</th><th>Estado</th><th>Cambiar a</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for h in habitaciones %}
+        <tr>
+          <td data-etiqueta="Numero" class="fw-semibold">{{ h.numero }}</td>
+          <td data-etiqueta="Tipo">{{ h.tipo }}</td>
+          <td data-etiqueta="Piso">{{ h.piso }}</td>
+          <td data-etiqueta="Capacidad">{{ h.capacidad_max }} personas</td>
+          <td data-etiqueta="Tarifa base" class="text-end">{{ h.tarifa_base | dinero }}</td>
+          <td data-etiqueta="Estado">
+            <span class="estado estado-{{ h.estado }}">{{ h.estado | title }}</span>
+          </td>
+          <td data-etiqueta="Cambiar a">
+            {% if usuario_actual.rol == 'ADMIN' %}
+            <form method="post" class="d-flex gap-1"
+                  action="{{ url_for('admin.estado_habitacion', id_habitacion=h.id_habitacion) }}">
+              <select name="estado" class="form-select form-select-sm"
+                      aria-label="Nuevo estado para la habitacion {{ h.numero }}">
+                <option value="DISPONIBLE">Disponible</option>
+                <option value="LIMPIEZA">Limpieza</option>
+                <option value="MANTENIMIENTO">Mantenimiento</option>
+              </select>
+              <button class="btn btn-sm btn-outline-primary">Aplicar</button>
+            </form>
+            {% else %}
+            <span class="text-suave small">Solo administracion</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

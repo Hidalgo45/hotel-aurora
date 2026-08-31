@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block titulo %}Habitaciones disponibles - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-4">
+
+  {# ---- Buscador: en movil se apila, en escritorio va en linea ---------- #}
+  <form class="buscador mb-4" method="get" action="{{ url_for('publico.catalogo') }}">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-3">
+        <label for="checkin" class="form-label">Entrada</label>
+        <input type="date" class="form-control" id="checkin" name="checkin"
+               value="{{ checkin }}" min="{{ hoy }}" required>
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="checkout" class="form-label">Salida</label>
+        <input type="date" class="form-control" id="checkout" name="checkout"
+               value="{{ checkout }}" required>
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="huespedes" class="form-label">Huespedes</label>
+        <select class="form-select" id="huespedes" name="huespedes">
+          {% for n in range(1, 7) %}
+          <option value="{{ n }}" {% if n == huespedes %}selected{% endif %}>
+            {{ n }} {{ 'persona' if n == 1 else 'personas' }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Actualizar busqueda</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="d-flex flex-wrap justify-content-between align-items-baseline mb-3 gap-2">
+    <h1 class="h3 mb-0">
+      {{ disponibles | length }}
+      {{ 'habitacion disponible' if disponibles | length == 1 else 'habitaciones disponibles' }}
+    </h1>
+    <p class="text-suave mb-0">
+      {{ checkin | fecha }} al {{ checkout | fecha }} ·
+      {{ noches }} {{ 'noche' if noches == 1 else 'noches' }} ·
+      {{ huespedes }} {{ 'huesped' if huespedes == 1 else 'huespedes' }}
+    </p>
+  </div>
+
+  {# ---- 1 columna en movil, 2 en tablet, 3 en escritorio --------------- #}
+  <div class="row g-4">
+    {% for item in disponibles %}
+    {% set h = item.datos %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <article class="card h-100">
+        <div class="card-body d-flex flex-column">
+
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h2 class="h5 mb-0">{{ h.tipo }} {{ h.numero }}</h2>
+            <span class="estado estado-{{ h.estado }}">{{ h.estado | title }}</span>
+          </div>
+
+          <p class="small text-suave mb-2">
+            Piso {{ h.piso }} · hasta {{ h.capacidad_max }} huespedes
+          </p>
+
+          <p class="small text-suave flex-grow-1">{{ h.descripcion }}</p>
+
+          <ul class="list-unstyled small mb-3">
+            {% for s in item.servicios %}
+            <li class="text-suave">· {{ s }}</li>
+            {% endfor %}
+          </ul>
+
+          <div class="border-top pt-3 mt-auto">
+            <div class="d-flex justify-content-between align-items-baseline mb-2">
+              <span class="text-suave small">{{ noches }} {{ 'noche' if noches == 1 else 'noches' }}</span>
+              <span class="precio h4 mb-0">{{ item.precio_total | dinero }}</span>
+            </div>
+            <p class="small text-suave mb-3">
+              {{ h.tarifa_base | dinero }} base por noche
+            </p>
+            <a class="btn btn-primary w-100"
+               href="{{ url_for('publico.detalle', id_habitacion=h.id_habitacion,
+                                checkin=checkin, checkout=checkout, huespedes=huespedes) }}">
+              Ver y reservar
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+    {% else %}
+    <div class="col-12">
+      <div class="alert alert-warning" role="status">
+        <strong>No hay habitaciones libres para esas fechas.</strong>
+        Prueba adelantando o retrasando un dia la entrada, o reduce el numero
+        de huespedes. Tambien puedes llamarnos al {{ hotel.telefono }}.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

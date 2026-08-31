@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block titulo %}Mis reservas - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-4">
+
+  <h1 class="h3 mb-1">Mis reservas</h1>
+  <p class="text-suave mb-4">
+    {{ reservas | length }} {{ 'reserva' if reservas | length == 1 else 'reservas' }}
+    en tu historial.
+  </p>
+
+  {% if reservas %}
+  {# En escritorio es una tabla; en movil cada fila se convierte en tarjeta #}
+  <div class="tabla-scroll">
+    <table class="table align-middle tabla-adaptable">
+      <thead>
+        <tr>
+          <th>Codigo</th><th>Fechas</th><th>Habitaciones</th>
+          <th>Estado</th><th class="text-end">Total</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reservas %}
+        <tr>
+          <td data-etiqueta="Codigo">
+            <a href="{{ url_for('publico.confirmacion', codigo=r.codigo) }}">
+              {{ r.codigo }}
+            </a>
+          </td>
+          <td data-etiqueta="Fechas">
+            {{ r.fecha_checkin | fecha }} a {{ r.fecha_checkout | fecha }}
+            <span class="text-suave small d-block">
+              {{ r.noches }} {{ 'noche' if r.noches == 1 else 'noches' }}
+            </span>
+          </td>
+          <td data-etiqueta="Habitaciones">
+            {% for h in r.habitaciones_detalle %}{{ h.numero }}{% if not loop.last %}, {% endif %}{% endfor %}
+          </td>
+          <td data-etiqueta="Estado">
+            <span class="estado estado-{{ r.estado }}">
+              {{ r.estado | replace('_', ' ') | title }}
+            </span>
+          </td>
+          <td data-etiqueta="Total" class="text-end precio">{{ r.total | dinero }}</td>
+          <td data-etiqueta="" class="text-end">
+            {% if r.estado in ['PENDIENTE', 'CONFIRMADA'] %}
+            <form method="post"
+                  action="{{ url_for('publico.cancelar', codigo=r.codigo) }}"
+                  data-confirmar="Se cancelara la reserva {{ r.codigo }}. Si faltan menos de 48 horas se aplica un cargo del 20%. Confirmas?">
+              <input type="hidden" name="motivo" value="Cancelada por el huesped">
+              <button class="btn btn-sm btn-outline-danger">Cancelar</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info" role="status">
+    Todavia no tienes reservas.
+    <a href="{{ url_for('publico.catalogo') }}" class="alert-link">
+      Busca una habitacion disponible
+    </a> para empezar.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block titulo %}Error del servidor - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-5 text-center" style="max-width: 560px;">
+  <p class="text-uppercase small text-suave">Error 500</p>
+  <h1 class="h3 mb-3">No pudimos completar la operacion</h1>
+  <p class="text-suave">
+    Hubo un problema en nuestro servidor. <strong>No se realizo ningun cobro
+    ni se modifico tu reserva.</strong> Intenta de nuevo en unos minutos.
+  </p>
+  <p class="text-suave">
+    Si necesitas ayuda inmediata, llamanos al <strong>{{ hotel.telefono }}</strong>.
+  </p>
+  <a class="btn btn-primary mt-3" href="{{ url_for('publico.home') }}">
+    Volver al inicio
+  </a>
+</div>
+{% endblock %}

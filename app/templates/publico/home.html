@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block titulo %}{{ hotel.nombre }} - Reserva en linea{% endblock %}
+
+{% block contenido %}
+
+<section class="hero">
+  <div class="container py-4 py-lg-5">
+    <div class="row align-items-center gy-4">
+      <div class="col-12 col-lg-6">
+        <h1>Tu habitacion en {{ hotel.ciudad.split(',')[0] }}, reservada en dos minutos</h1>
+        <p class="mt-3 mb-0" style="max-width: 46ch;">
+          28 habitaciones en el corazon de la ciudad. Consulta disponibilidad
+          real, elige tus fechas y recibe tu codigo de reserva al instante.
+        </p>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <form class="buscador" method="get" action="{{ url_for('publico.catalogo') }}">
+          <h2 class="h5 mb-3">Consultar disponibilidad</h2>
+
+          <div class="row g-3">
+            <div class="col-12 col-sm-6">
+              <label for="checkin" class="form-label">Fecha de entrada</label>
+              <input type="date" class="form-control" id="checkin" name="checkin"
+                     value="{{ manana }}" min="{{ hoy }}" required>
+            </div>
+            <div class="col-12 col-sm-6">
+              <label for="checkout" class="form-label">Fecha de salida</label>
+              <input type="date" class="form-control" id="checkout" name="checkout"
+                     required>
+            </div>
+            <div class="col-12 col-sm-6">
+              <label for="huespedes" class="form-label">Huespedes</label>
+              <select class="form-select" id="huespedes" name="huespedes">
+                {% for n in range(1, 7) %}
+                <option value="{{ n }}" {% if n == 2 %}selected{% endif %}>
+                  {{ n }} {{ 'persona' if n == 1 else 'personas' }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-12 col-sm-6 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100">
+                Buscar habitaciones
+              </button>
+            </div>
+          </div>
+
+          <p class="mt-3 mb-0 small text-suave" data-noches></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <h2 class="mb-1">Nuestras habitaciones</h2>
+  <p class="text-suave mb-4">
+    Tres categorias pensadas para distintos tipos de viaje.
+  </p>
+
+  <div class="row g-4">
+    {% for t in tipos %}
+    <div class="col-12 col-md-6 col-lg-4">
+      <article class="card h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h3 class="h5 mb-0">{{ t.nombre }}</h3>
+            <span class="estado estado-DISPONIBLE">
+              {{ t.libres_ahora }} libres
+            </span>
+          </div>
+
+          <p class="text-suave small flex-grow-1">{{ t.descripcion }}</p>
+
+          <ul class="list-unstyled small text-suave mb-3">
+            <li>Hasta {{ t.capacidad_max }} huespedes</li>
+            <li>{{ t.unidades }} habitaciones de este tipo</li>
+          </ul>
+
+          <p class="precio h4 mb-3">
+            {{ t.tarifa_base | dinero }}
+            <span class="fs-6 fw-normal text-suave">por noche</span>
+          </p>
+
+          <a class="btn btn-outline-primary w-100"
+             href="{{ url_for('publico.catalogo', huespedes=t.capacidad_max) }}">
+            Ver disponibilidad
+          </a>
+        </div>
+      </article>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container pb-5">
+  <div class="row g-4">
+    <div class="col-12 col-md-4">
+      <h3 class="h6 text-uppercase small">Disponibilidad real</h3>
+      <p class="text-suave small mb-0">
+        Lo que ves libre esta libre: el sistema bloquea el cruce de fechas en el
+        momento mismo de guardar la reserva.
+      </p>
+    </div>
+    <div class="col-12 col-md-4">
+      <h3 class="h6 text-uppercase small">Cancelacion clara</h3>
+      <p class="text-suave small mb-0">
+        Sin cargo hasta 48 horas antes de la llegada. Si cancelas despues, te
+        mostramos el monto exacto antes de confirmar.
+      </p>
+    </div>
+    <div class="col-12 col-md-4">
+      <h3 class="h6 text-uppercase small">Atencion directa</h3>
+      <p class="text-suave small mb-0">
+        Recepcion disponible las 24 horas en el {{ hotel.telefono }}.
+      </p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

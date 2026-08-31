@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block titulo %}Tablero - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-4">
+
+  <h1 class="h3 mb-1">Tablero de gestion</h1>
+  <p class="text-suave mb-4">Estado del hotel al dia de hoy.</p>
+
+  {# ---- Indicadores: 1 columna en movil, 2 en tablet, 4 en escritorio --- #}
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="kpi">
+        <p class="etiqueta mb-1">Ocupadas ahora</p>
+        <p class="valor mb-0">
+          {{ indicadores.ocupadas_hoy }}
+          <span class="fs-6 fw-normal text-suave">/ {{ indicadores.habitaciones }}</span>
+        </p>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="kpi">
+        <p class="etiqueta mb-1">Entradas hoy</p>
+        <p class="valor mb-0">{{ indicadores.entradas_hoy }}</p>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="kpi">
+        <p class="etiqueta mb-1">Salidas hoy</p>
+        <p class="valor mb-0">{{ indicadores.salidas_hoy }}</p>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="kpi">
+        <p class="etiqueta mb-1">Ingresos del mes</p>
+        <p class="valor mb-0">{{ indicadores.ingresos_mes | dinero }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    {# ---- Proximas llegadas ---- #}
+    <div class="col-12 col-xl-8">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Llegadas de los proximos 7 dias</h2>
+
+          {% if llegadas %}
+          <div class="tabla-scroll">
+            <table class="table table-sm align-middle tabla-adaptable mb-0">
+              <thead>
+                <tr>
+                  <th>Codigo</th><th>Huesped</th><th>Entrada</th>
+                  <th>Habitaciones</th><th>Estado</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for l in llegadas %}
+                <tr>
+                  <td data-etiqueta="Codigo">
+                    <a href="{{ url_for('publico.confirmacion', codigo=l.codigo) }}">{{ l.codigo }}</a>
+                  </td>
+                  <td data-etiqueta="Huesped">{{ l.cliente }}</td>
+                  <td data-etiqueta="Entrada">{{ l.fecha_checkin | fecha }}</td>
+                  <td data-etiqueta="Habitaciones">{{ l.habitaciones or '-' }}</td>
+                  <td data-etiqueta="Estado">
+                    <span class="estado estado-{{ l.estado }}">{{ l.estado | title }}</span>
+                  </td>
+                  <td data-etiqueta="" class="text-end">
+                    {% if l.estado == 'CONFIRMADA' %}
+                    <form method="post"
+                          action="{{ url_for('admin.cambiar_estado', codigo=l.codigo) }}">
+                      <input type="hidden" name="estado" value="CHECK_IN">
+                      <button class="btn btn-sm btn-primary">Check-in</button>
+                    </form>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-suave mb-0">No hay llegadas programadas esta semana.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {# ---- Inventario por tipo ---- #}
+    <div class="col-12 col-xl-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Inventario por tipo</h2>
+          {% for e in estado_hotel %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between small mb-1">
+              <span class="fw-semibold">{{ e.tipo }}</span>
+              <span class="text-suave">{{ e.disponibles }} libres de {{ e.total }}</span>
+            </div>
+            <div class="barra">
+              <span style="width: {{ (100 * (e.total - e.disponibles) / e.total) | round(0) }}%"></span>
+            </div>
+            <p class="small text-suave mt-1 mb-0">
+              {{ e.ocupadas }} ocupadas · {{ e.reservadas }} reservadas
+              {% if e.mantenimiento %} · {{ e.mantenimiento }} en mantenimiento{% endif %}
+            </p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {# ---- Bitacora generada por el trigger ---- #}
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h5 mb-1">Bitacora de habitaciones</h2>
+          <p class="small text-suave mb-3">
+            Estos registros los escribe automaticamente el trigger
+            <code>trg_reserva_estado</code> cada vez que cambia el estado de una reserva.
+          </p>
+
+          {% if bitacora %}
+          <div class="tabla-scroll">
+            <table class="table table-sm align-middle tabla-adaptable mb-0">
+              <thead>
+                <tr>
+                  <th>Momento</th><th>Habitacion</th><th>Cambio</th>
+                  <th>Reserva</th><th>Usuario BD</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for b in bitacora %}
+                <tr>
+                  <td data-etiqueta="Momento">{{ b.ocurrido_en.strftime('%d/%m %H:%M') }}</td>
+                  <td data-etiqueta="Habitacion">{{ b.numero }}</td>
+                  <td data-etiqueta="Cambio">
+                    <span class="text-suave">{{ b.estado_anterior or '-' }}</span>
+                    &rarr;
+                    <span class="estado estado-{{ b.estado_nuevo }}">{{ b.estado_nuevo | title }}</span>
+                  </td>
+                  <td data-etiqueta="Reserva">{{ b.codigo or '-' }}</td>
+                  <td data-etiqueta="Usuario BD"><code>{{ b.usuario_bd }}</code></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-suave mb-0">
+            Todavia no hay movimientos registrados. Haz un check-in y aparecera aqui.
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block titulo %}Iniciar sesion - {{ hotel.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="container py-5" style="max-width: 460px;">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="h4 mb-1">Iniciar sesion</h1>
+      <p class="text-suave small mb-4">
+        Accede para gestionar tus reservas.
+      </p>
+
+      <form method="post" novalidate>
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electronico</label>
+          <input type="email" class="form-control" id="email" name="email"
+                 value="{{ email }}" autocomplete="email" required autofocus>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label">Contrasena</label>
+          <input type="password" class="form-control" id="password"
+                 name="password" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+      </form>
+
+      <p class="text-center small mt-4 mb-0">
+        No tienes cuenta?
+        <a href="{{ url_for('cuenta.registro') }}">Crear una cuenta</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-body small">
+      <p class="fw-semibold mb-2">Cuentas de demostracion</p>
+      <ul class="list-unstyled mb-0 text-suave">
+        <li>Administrador: <code>mateo@aurora.ec</code></li>
+        <li>Recepcion: <code>valeria@aurora.ec</code></li>
+        <li>Huesped: <code>carolina.naranjo@correo.com</code></li>
+        <li class="mt-1">Contrasena de todas: <code>aurora123</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
