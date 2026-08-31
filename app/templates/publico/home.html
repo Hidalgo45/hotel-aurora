@@ -16,7 +16,12 @@
 
       <div class="col-12 col-lg-6">
         <form class="buscador" method="get" action="{{ url_for('publico.catalogo') }}">
-          <h2 class="h5 mb-3">Consultar disponibilidad</h2>
+          <div class="buscador-cab">
+            <h2 class="h5 mb-1">Que dias piensa viajar?</h2>
+            <p class="small mb-0">
+              Elige tus fechas y te mostramos solo las habitaciones libres.
+            </p>
+          </div>
 
           <div class="row g-3">
             <div class="col-12 col-sm-6">
@@ -95,26 +100,36 @@
 </section>
 
 <section class="container pb-5">
+  <h2 class="h4 mb-1">Por que reservar directamente</h2>
+  <p class="text-suave mb-4">Tres cosas que si te podemos garantizar.</p>
+
   <div class="row g-4">
     <div class="col-12 col-md-4">
-      <h3 class="h6 text-uppercase small">Disponibilidad real</h3>
-      <p class="text-suave small mb-0">
-        Lo que ves libre esta libre: el sistema bloquea el cruce de fechas en el
-        momento mismo de guardar la reserva.
-      </p>
+      <div class="ventaja">
+        <h3>Disponibilidad real</h3>
+        <p>
+          Lo que ves libre esta libre: el sistema bloquea el cruce de fechas en
+          el momento mismo de guardar la reserva.
+        </p>
+      </div>
     </div>
     <div class="col-12 col-md-4">
-      <h3 class="h6 text-uppercase small">Cancelacion clara</h3>
-      <p class="text-suave small mb-0">
-        Sin cargo hasta 48 horas antes de la llegada. Si cancelas despues, te
-        mostramos el monto exacto antes de confirmar.
-      </p>
+      <div class="ventaja">
+        <h3>Cancelacion clara</h3>
+        <p>
+          Sin cargo hasta 48 horas antes de la llegada. Si cancelas despues, te
+          mostramos el monto exacto antes de confirmar.
+        </p>
+      </div>
     </div>
     <div class="col-12 col-md-4">
-      <h3 class="h6 text-uppercase small">Atencion directa</h3>
-      <p class="text-suave small mb-0">
-        Recepcion disponible las 24 horas en el {{ hotel.telefono }}.
-      </p>
+      <div class="ventaja">
+        <h3>Atencion directa</h3>
+        <p>
+          Recepcion disponible las 24 horas del dia en el
+          <a href="tel:{{ hotel.telefono | replace(' ', '') }}">{{ hotel.telefono }}</a>.
+        </p>
+      </div>
     </div>
   </div>
 </section>
