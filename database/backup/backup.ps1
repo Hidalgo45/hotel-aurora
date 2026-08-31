@@ -26,6 +26,21 @@ Get-Content $envFile | ForEach-Object {
     if ($_ -match '^\s*([A-Z_]+)\s*=\s*(.*)$') { $config[$matches[1]] = $matches[2].Trim() }
 }
 
+# ---- Localizar pg_dump ----
+# El instalador de PostgreSQL en Windows no agrega su carpeta bin al PATH,
+# asi que se busca primero en el PATH y luego en Archivos de programa.
+$pgDump = (Get-Command pg_dump -ErrorAction SilentlyContinue).Source
+if (-not $pgDump) {
+    $candidato = Get-ChildItem "C:\Program Files\PostgreSQL\*\bin\pg_dump.exe" -ErrorAction SilentlyContinue |
+                 Sort-Object FullName -Descending | Select-Object -First 1
+    if ($candidato) { $pgDump = $candidato.FullName }
+}
+if (-not $pgDump) {
+    Write-Host "No se encontro pg_dump. Instala PostgreSQL o agrega su carpeta bin al PATH." -ForegroundColor Red
+    exit 1
+}
+Write-Host "  Usando: $pgDump" -ForegroundColor DarkGray
+
 $destino = Join-Path $raiz "respaldos"
 New-Item -ItemType Directory -Force -Path $destino | Out-Null
 
@@ -37,13 +52,13 @@ Write-Host "  Respaldando $($config['DB_NAME'])..." -ForegroundColor Cyan
 
 # ---- 1. Respaldo completo en formato custom ----
 # --format=custom permite restaurar tablas por separado y comprime al vuelo
-pg_dump --host=$($config["DB_HOST"]) --port=$($config["DB_PORT"]) `
+& $pgDump --host=$($config["DB_HOST"]) --port=$($config["DB_PORT"]) `
         --username=$($config["DB_USER"]) --dbname=$($config["DB_NAME"]) `
         --format=custom --compress=9 `
         --file="$destino\aurora_$fecha.dump"
 
 # ---- 2. Solo el esquema, para versionarlo junto al codigo ----
-pg_dump --host=$($config["DB_HOST"]) --port=$($config["DB_PORT"]) `
+& $pgDump --host=$($config["DB_HOST"]) --port=$($config["DB_PORT"]) `
         --username=$($config["DB_USER"]) --dbname=$($config["DB_NAME"]) `
         --schema-only `
         --file="$destino\esquema_$fecha.sql"
