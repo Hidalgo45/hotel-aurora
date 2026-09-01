@@ -119,6 +119,7 @@ hotel-aurora/
 │   ├── _diagramas.html               Fuente Mermaid para regenerar ambos
 │   ├── _servidor_diagramas.py        Servidor temporal que los exporta a SVG
 │   ├── manual_usuario.md             Cómo se usa el sistema, por tipo de usuario
+│   ├── Manual_de_Uso_Aurora_ilustrado.pdf   El mismo manual con capturas paso a paso
 │   ├── bitacora_git.md               Cómo nos repartimos el trabajo
 │   ├── encuesta_usabilidad.md        La encuesta y sus resultados
 │   └── evidencias_ux/                Capturas, respuestas e informe de usabilidad
