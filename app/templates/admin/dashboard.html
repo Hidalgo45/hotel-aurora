@@ -102,9 +102,13 @@
             <div class="barra">
               <span style="width: {{ (100 * (e.total - e.disponibles) / e.total) | round(0) }}%"></span>
             </div>
+            {# Se listan todos los estados que tengan habitaciones, no solo
+               algunos: si se omite uno las cifras no cuadran con el total y
+               quien lee el tablero no sabe donde esta la que falta. #}
             <p class="small text-suave mt-1 mb-0">
               {{ e.ocupadas }} ocupadas · {{ e.reservadas }} reservadas
-              {% if e.mantenimiento %} · {{ e.mantenimiento }} en mantenimiento{% endif %}
+              {%- if e.limpieza %} · {{ e.limpieza }} en limpieza{% endif %}
+              {%- if e.mantenimiento %} · {{ e.mantenimiento }} en mantenimiento{% endif %}
             </p>
           </div>
           {% endfor %}
@@ -112,11 +116,11 @@
       </div>
     </div>
 
-    {# ---- Bitacora generada por el trigger ---- #}
+    {# ---- Bitácora generada por el trigger ---- #}
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h2 class="h5 mb-1">Bitacora de habitaciones</h2>
+          <h2 class="h5 mb-1">Bitácora de habitaciones</h2>
           <p class="small text-suave mb-3">
             Estos registros los escribe automáticamente el trigger
             <code>trg_reserva_estado</code> cada vez que cambia el estado de una reserva.
@@ -150,7 +154,7 @@
           </div>
           {% else %}
           <p class="text-suave mb-0">
-            Todavia no hay movimientos registrados. Haz un check-in y aparecera aquí.
+            Todavía no hay movimientos registrados. Haz un check-in y aparecerá aquí.
           </p>
           {% endif %}
         </div>
