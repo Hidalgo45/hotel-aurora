@@ -61,12 +61,12 @@ Esta es la salida real del historial al cierre del proyecto:
 ```
 git shortlog -sn --all
 
-    18  Mateo Hidalgo
+    26  Mateo Hidalgo
      4  Isaac Carrion
      3  Valeria Tobar
 ```
 
-En total, 25 commits entre el 30 y el 31 de agosto de 2026. El detalle
+En total, 33 commits entre el 30 de agosto y el 1 de septiembre de 2026. El detalle
 completo, commit por commit, está en `docs/historial_commits.csv`.
 
 ### Por qué el reparto no es parejo
