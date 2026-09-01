@@ -1,3 +1,15 @@
+-- QUE HACE: define quien puede hacer que dentro de la base de datos.
+--
+-- SI PREGUNTAN POR ESTE ARCHIVO:
+-- "Creamos tres usuarios distintos con permisos distintos. El que usa la
+--  aplicacion ni siquiera puede borrar filas: cancelar una reserva no la
+--  elimina, le cambia el estado. Asi el historial queda completo y los
+--  reportes siguen siendo correctos."
+--
+-- Incluye tambien consultas para revisar la calidad de los datos: detectan
+-- cosas que no deberian pasar, como una habitacion marcada como ocupada sin
+-- ninguna reserva activa.
+
 -- ============================================================================
 --  HOTEL AURORA  ·  06_seguridad.sql
 --  Criterio 1.5: control de acceso a los datos, calidad de la informacion

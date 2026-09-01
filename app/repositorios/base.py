@@ -1,8 +1,11 @@
-"""Contratos de acceso a datos.
+"""QUE HACE: define lo que cualquier repositorio tiene que saber hacer,
+sin decir como lo hace.
 
-El dominio depende de estas interfaces abstractas, no de PostgreSQL. Si manana
-la persistencia cambiara, bastaria escribir otra implementacion sin tocar las
-reglas de negocio.
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Es como un contrato. Dice: quien quiera encargarse de guardar reservas
+tiene que saber crearlas, buscarlas y cancelarlas. Como lo consiga es asunto
+suyo. Gracias a eso, las clases del dominio no saben que detras hay
+PostgreSQL, y por eso se pueden probar sin base de datos."
 """
 from __future__ import annotations
 

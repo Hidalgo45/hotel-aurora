@@ -1,8 +1,22 @@
-"""La reserva: objeto central del dominio.
+"""QUE HACE: es el centro del sistema. Una reserva junta un cliente, una o
+varias habitaciones, los servicios contratados y en que etapa esta.
 
-Muestra composicion (una reserva agrupa habitaciones y servicios) y una
-maquina de estados propia. El calculo del total es polimorfico: recorre las
-habitaciones sin preguntar de que tipo es cada una.
+SI PREGUNTAN POR ESTE ARCHIVO:
+"La reserva no hereda de habitacion, la contiene. Guarda una lista de
+habitaciones y otra de servicios, y para calcular el total le pregunta a cada
+una cuanto cobra."
+
+Tambien controla por que etapas puede pasar: pendiente, confirmada, entrada
+registrada, salida registrada. No deja saltarse pasos. No se puede registrar
+la salida de alguien que nunca entro.
+
+UN DETALLE QUE VALE LA PENA SABER:
+El constructor comprueba que la salida sea posterior a la entrada y que haya
+al menos un adulto, porque eso siempre debe cumplirse. Pero no comprueba que
+la fecha no sea del pasado: eso esta en un metodo aparte, porque depende de
+cuando se pregunte. Una reserva de septiembre es valida hoy e invalida en
+octubre. Si estuviera en el constructor, no se podrian cargar las reservas
+antiguas guardadas en la base.
 """
 from __future__ import annotations
 

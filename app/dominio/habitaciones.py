@@ -1,18 +1,20 @@
-"""Jerarquia de habitaciones del Hotel Aurora.
+"""QUE HACE: define los tres tipos de habitacion del hotel.
 
-Demuestra los cuatro pilares de la POO:
+Hay una clase base, Habitacion, que dice lo que toda habitacion debe saber
+hacer pero no como. De ella salen Estandar, Suite y Familiar, y cada una
+calcula su precio a su manera.
 
-  Abstraccion     Habitacion es una clase abstracta (ABC): no se puede
-                  instanciar una "habitacion generica".
-  Encapsulamiento El estado es un atributo privado (__estado) que solo se
-                  puede modificar a traves de cambiar_estado(), que valida
-                  la transicion.
-  Herencia        Estandar, Familiar y Suite comparten datos y comportamiento.
-  Polimorfismo    Las tres implementan calcular_tarifa() con formulas
-                  distintas y el resto del sistema las trata igual.
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Aqui esta el ejemplo mas claro del proyecto. Las tres habitaciones cobran
+distinto: la estandar multiplica el precio por las noches, la suite recarga
+un 25 % y descuenta si te quedas 5 noches o mas, y la familiar suma un cargo
+por cada cama adicional. Pero la reserva las suma todas con una sola linea,
+sin preguntar de que tipo es ninguna. Cada habitacion sabe cobrarse sola."
 
-Las formulas de este modulo son el espejo exacto de la funcion SQL
-fn_calcular_tarifa (database/04_procedures.sql).
+Tambien esta aqui el estado de la habitacion, que es un dato protegido: se
+puede leer pero no cambiar directamente. Para cambiarlo hay que pedirlo, y
+el objeto comprueba si ese cambio tiene sentido. Asi nadie puede marcar una
+habitacion como ocupada sin que antes se haya reservado.
 """
 from __future__ import annotations
 

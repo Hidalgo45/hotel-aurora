@@ -1,4 +1,13 @@
-"""Fabrica de la aplicacion Flask del Hotel Aurora."""
+"""QUE HACE: arma la aplicacion y la deja lista para funcionar.
+
+Registra las tres zonas de paginas, define como se muestran el dinero y las
+fechas, pone los datos del hotel al alcance de todas las pantallas y decide
+que mostrar cuando algo falla.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Es el punto donde se juntan las piezas. El formato del dinero se define una
+sola vez aqui, y por eso todos los precios del sistema se ven igual."
+"""
 from __future__ import annotations
 
 from datetime import date, timedelta

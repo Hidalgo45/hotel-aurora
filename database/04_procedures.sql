@@ -1,3 +1,16 @@
+-- QUE HACE: guarda dentro de la base las operaciones importantes, para
+-- llamarlas por su nombre.
+--
+-- SI PREGUNTAN POR ESTE ARCHIVO:
+-- "Crear una reserva son varios pasos: validar, guardar la cabecera, guardar
+--  cada habitacion, calcular el total. O pasan todos o no pasa ninguno. Al
+--  estar aqui dentro forman una sola operacion, y si algo falla a la mitad la
+--  base deshace todo automaticamente."
+--
+-- Al final del procedimiento de crear reserva hay un bloque que atrapa el
+-- error tecnico del choque de fechas y lo convierte en un mensaje que la
+-- persona puede entender.
+
 -- ============================================================================
 --  HOTEL AURORA  ·  04_procedures.sql
 --  Criterio 1.2: reglas de negocio en operaciones criticas mediante

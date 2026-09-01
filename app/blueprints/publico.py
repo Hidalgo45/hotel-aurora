@@ -1,4 +1,13 @@
-"""Rutas publicas: inicio, catalogo, detalle, reserva y confirmacion."""
+"""QUE HACE: las paginas que ve cualquier visitante: inicio, catalogo,
+detalle de habitacion, crear la reserva, ver la confirmacion y cancelar.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Aqui se ve el recorrido completo de una reserva. Primero se arma el objeto
+Reserva y se le pide que se valide a si mismo. Solo si pasa esa revision se
+manda a la base, que la valida otra vez por su cuenta. Y el comprobante por
+correo se envia al final, despues de que la reserva ya quedo guardada: si el
+correo falla, la reserva no se pierde."
+"""
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta

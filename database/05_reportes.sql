@@ -1,3 +1,15 @@
+-- QUE HACE: guarda las dos consultas de los reportes con un nombre, para
+-- poder llamarlas facil desde el programa.
+--
+-- SI PREGUNTAN POR ESTE ARCHIVO:
+-- "El reporte de ocupacion cruza cuatro tablas. Lo ingenioso es que convierte
+--  cada estadia en noches sueltas (una reserva del 10 al 14 se vuelve cuatro
+--  filas) para poder contarlas por mes, y despues las compara con las noches
+--  que habia disponibles."
+--
+-- El segundo reporte suma por cliente todo lo que ha gastado en alojamiento y
+-- servicios, y calcula si quedo debiendo algo.
+
 -- ============================================================================
 --  HOTEL AURORA  ·  05_reportes.sql
 --  Criterio 1.4: dos reportes relevantes con consultas complejas que integran

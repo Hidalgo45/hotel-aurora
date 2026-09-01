@@ -1,10 +1,11 @@
-"""Instalador de la base de datos del Hotel Aurora.
+"""QUE HACE: crea la base de datos y la deja cargada con datos de prueba.
 
-Crea la base de datos si no existe y ejecuta los siete scripts SQL en orden.
-Se puede volver a correr las veces que haga falta: reconstruye todo desde cero.
+Ejecuta los siete archivos de instrucciones en orden. Se puede repetir cuantas
+veces haga falta, porque reconstruye todo desde cero.
 
-Uso:
-    .venv\\Scripts\\python.exe setup_db.py
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Cualquiera puede tener el sistema funcionando con un solo comando. No hace
+falta crear tablas a mano en pgAdmin."
 """
 from __future__ import annotations
 

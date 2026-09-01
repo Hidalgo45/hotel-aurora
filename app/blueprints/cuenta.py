@@ -1,4 +1,11 @@
-"""Autenticacion y area privada del huesped."""
+"""QUE HACE: iniciar sesion, cerrar sesion, registrarse y ver las reservas
+propias.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Al iniciar sesion no se compara la contrasena escrita con la guardada,
+porque la guardada no se puede leer. Lo que se hace es convertir la escrita
+de la misma forma y comparar los resultados."
+"""
 from __future__ import annotations
 
 from datetime import datetime

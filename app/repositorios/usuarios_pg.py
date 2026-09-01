@@ -1,4 +1,10 @@
-"""Usuarios y autenticacion sobre PostgreSQL."""
+"""QUE HACE: busca y registra usuarios en la base de datos.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Al registrar un cliente se guardan dos filas: una en la tabla de usuarios,
+con lo que todos comparten, y otra en la de clientes, con lo suyo propio.
+Las dos se escriben juntas: si una falla, no se guarda ninguna."
+"""
 from __future__ import annotations
 
 from werkzeug.security import generate_password_hash

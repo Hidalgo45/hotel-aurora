@@ -1,3 +1,15 @@
+-- QUE HACE: define codigo que la base ejecuta SOLA cuando pasa algo.
+--
+-- SI PREGUNTAN POR ESTE ARCHIVO:
+-- "Un disparador es como una alarma: esta dormido y se despierta cuando ocurre
+--  algo concreto. El principal se despierta cada vez que una reserva cambia de
+--  estado, y entonces actualiza las habitaciones y lo anota en la bitacora.
+--  Nadie lo llama; la base lo hace por su cuenta."
+--
+-- Lo pusimos aqui y no en el programa porque asi funciona siempre, venga el
+-- cambio de donde venga. Si alguien modifica una reserva directamente desde
+-- pgAdmin, las habitaciones igual se actualizan.
+
 -- ============================================================================
 --  HOTEL AURORA  ·  03_triggers.sql
 --  Criterio 1.2: reglas que deben cumplirse SIEMPRE, entre por donde entren

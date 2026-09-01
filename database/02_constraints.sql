@@ -1,3 +1,17 @@
+-- QUE HACE: pone las reglas que la base NO deja incumplir.
+--
+-- No son avisos: son rechazos. Si el dato no cumple, no entra.
+--
+-- SI PREGUNTAN POR ESTE ARCHIVO:
+-- "Aqui esta la regla mas importante del proyecto. Cada habitacion guarda el
+--  rango de fechas que tiene ocupado, y hay una regla que dice que no pueden
+--  existir dos filas de la misma habitacion cuyos rangos se crucen. La base lo
+--  comprueba en el momento exacto de guardar, asi que funciona aunque dos
+--  personas reserven en el mismo segundo."
+--
+-- Hay 24 comprobaciones de datos (cedula de 10 digitos, precios positivos,
+-- mayoria de edad), 9 reglas de dato unico y 2 de no solapamiento.
+
 -- ============================================================================
 --  HOTEL AURORA  ·  02_constraints.sql
 --  Replica en la base de datos TODAS las validaciones del formulario web.

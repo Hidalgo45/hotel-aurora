@@ -1,4 +1,13 @@
-"""Panel de administracion: tablero, reservas, inventario y reportes."""
+"""QUE HACE: el panel del personal: tablero, gestion de reservas,
+inventario y reportes.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Cuando aqui se cambia el estado de una reserva, nosotros no tocamos las
+habitaciones. Solo cambiamos la reserva, y la base de datos se encarga sola
+de actualizar el inventario y de anotarlo en la bitacora."
+
+Los reportes son exclusivos del administrador; recepcion no los ve.
+"""
 from __future__ import annotations
 
 import csv

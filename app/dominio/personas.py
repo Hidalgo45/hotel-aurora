@@ -1,7 +1,16 @@
-"""Jerarquia de personas del Hotel Aurora.
+"""QUE HACE: define quienes usan el sistema.
 
-Segunda demostracion de herencia y polimorfismo: Persona es abstracta y cada
-rol concreto define sus propios permisos y su descripcion.
+Persona es la base con lo que todos comparten: cedula, nombre, correo. De ahi
+sale Usuario, que agrega la contrasena, y de Usuario salen los tres roles:
+Administrador, Recepcionista y Cliente.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Los tres roles comparten casi todo, asi que lo comun esta escrito una sola
+vez en la clase de arriba. Lo unico distinto es lo que cada uno puede hacer,
+y eso lo responde cada rol por su cuenta."
+
+La contrasena nunca se guarda tal cual: se convierte en un codigo del que no
+se puede volver atras. Si alguien viera la tabla, no podria leer ninguna.
 """
 from __future__ import annotations
 

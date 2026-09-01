@@ -1,8 +1,13 @@
-"""Acceso a PostgreSQL.
+"""QUE HACE: es la unica puerta por la que el programa habla con la base
+de datos. Todas las consultas del proyecto pasan por aqui.
 
-Todas las consultas del proyecto pasan por aqui y siempre son parametrizadas
-(los valores viajan aparte de la sentencia), que es la defensa contra
-inyeccion SQL.
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Los valores nunca se pegan dentro del texto de la consulta: viajan aparte.
+Eso es lo que impide que alguien escriba instrucciones maliciosas en un
+formulario y la base las ejecute."
+
+Tiene cuatro funciones: una devuelve varias filas, otra una sola, otra hace
+cambios, y la ultima comprueba que la base responda.
 """
 from __future__ import annotations
 

@@ -1,4 +1,11 @@
-"""Capa web: rutas agrupadas por area funcional."""
+"""QUE HACE: contiene los dos guardianes que protegen las paginas.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Uno exige haber iniciado sesion; si no, manda al login. El otro exige tener
+cierto rol; si un cliente intenta entrar al panel de gestion, lo devuelve al
+inicio con un aviso. Se escriben una vez y se reutilizan en todas las
+paginas que lo necesiten."
+"""
 from __future__ import annotations
 
 from functools import wraps

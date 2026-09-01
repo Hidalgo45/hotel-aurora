@@ -1,10 +1,15 @@
-"""Pruebas del dominio.
+"""QUE HACE: comprueba automaticamente que las reglas del negocio se cumplan.
 
-Se ejecutan sin base de datos y sin servidor: el paquete app.dominio no
-importa Flask ni psycopg. Eso es justamente lo que demuestra la separacion
-de capas.
+Son 25 pruebas y corren en menos de un segundo, sin necesidad de base de
+datos ni servidor.
 
-    .venv\\Scripts\\python.exe -m pytest -v
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Cada prueba describe una regla del hotel y comprueba que el sistema la
+respete. Por ejemplo: que no se pueda registrar la salida de alguien que
+nunca entro, o que cancelar con menos de 48 horas cobre el 20 %."
+
+Que corran tan rapido es consecuencia de como esta separado el proyecto: las
+clases con las reglas no dependen ni del servidor ni de la base.
 """
 from datetime import date, timedelta
 from decimal import Decimal

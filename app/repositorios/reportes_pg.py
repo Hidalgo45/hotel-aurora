@@ -1,7 +1,9 @@
-"""Reportes gerenciales.
+"""QUE HACE: ejecuta las consultas de los reportes y del tablero.
 
-Las consultas complejas viven en la base como vistas (database/05_reportes.sql);
-aqui solo se las invoca. Asi el mismo SQL sirve en pgAdmin y en la aplicacion.
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Las consultas complicadas no estan escritas aqui, estan guardadas dentro de
+la base de datos con un nombre. Este archivo solo las llama. Asi la consulta
+se puede revisar y probar directamente en pgAdmin sin abrir el programa."
 """
 from __future__ import annotations
 

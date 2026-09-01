@@ -1,4 +1,13 @@
-"""Configuracion de la aplicacion, leida del archivo .env."""
+"""QUE HACE: reune en un solo lugar todos los ajustes del sistema.
+
+Lee el archivo .env, que es donde vive la contrasena de la base y los datos
+del correo.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Las contrasenas no estan escritas en el codigo. Estan en un archivo aparte
+que no se sube al repositorio, y cada integrante tiene el suyo con sus
+propios datos."
+"""
 from __future__ import annotations
 
 import os

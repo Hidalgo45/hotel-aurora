@@ -1,3 +1,15 @@
+-- QUE HACE: crea las 13 tablas del sistema y las conecta entre si.
+--
+-- SI PREGUNTAN POR ESTE ARCHIVO:
+-- "Es la estructura completa. Cada tabla tiene una columna que identifica sus
+--  filas sin confusion, y las columnas que apuntan a otra tabla son las que
+--  conectan la informacion: una reserva sabe de que cliente es porque guarda
+--  su identificador."
+--
+-- La tabla reserva_habitacion existe porque una reserva puede tener varias
+-- habitaciones y una habitacion aparece en muchas reservas. Cuando pasa eso,
+-- hace falta una tabla en medio; no se puede resolver con una sola columna.
+
 -- ============================================================================
 --  HOTEL AURORA  ·  Sistema de Reservas y Gestion Hotelera
 --  01_schema.sql  ·  Tipos, tablas, claves primarias, foraneas e indices

@@ -1,13 +1,13 @@
-"""Punto de entrada del Hotel Aurora.
+"""QUE HACE: enciende el sistema.
 
-Uso normal, solo en este computador:
+Comprueba que la base responda, muestra la direccion donde queda disponible
+y arranca el servidor.
 
-    .venv\\Scripts\\python.exe run.py
-
-Para que otras personas de la misma red WiFi puedan entrar (pruebas de
-usabilidad), se enlaza a todas las interfaces:
-
-    .venv\\Scripts\\python.exe run.py --publico
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Si se ejecuta con --publico, en vez de escuchar solo en esta computadora
+escucha en toda la red, para que otros puedan entrar desde su celular. En ese
+caso apaga solo el modo de desarrollo, porque ese modo permite ejecutar
+codigo desde el navegador y abierto a la red seria peligroso."
 """
 import os
 import socket

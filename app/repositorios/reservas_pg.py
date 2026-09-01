@@ -1,7 +1,16 @@
-"""Reservas sobre PostgreSQL.
+"""QUE HACE: es el puente entre las clases del sistema y la base de datos,
+para todo lo que tiene que ver con reservas.
 
-Las operaciones criticas no se arman con SQL suelto: se delegan a los
-procedimientos almacenados, que las ejecutan dentro de una sola transaccion.
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Crear una reserva son varios pasos: guardar la cabecera, guardar cada
+habitacion, calcular precios, actualizar el total. O pasan todos o no pasa
+ninguno, porque si el sistema se cayera a la mitad quedaria una reserva sin
+habitaciones. Por eso no lo hacemos aqui paso a paso: se lo pedimos a un
+procedimiento que vive dentro de la base y lo ejecuta todo junto."
+
+Tambien traduce los errores de la base a mensajes que la persona entiende.
+Cuando la base rechaza una reserva porque las fechas se cruzan con otra,
+aqui se convierte en "esa habitacion ya esta reservada en esas fechas".
 """
 from __future__ import annotations
 

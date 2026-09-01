@@ -1,4 +1,13 @@
-"""Consultas de inventario y disponibilidad sobre PostgreSQL."""
+"""QUE HACE: consulta las habitaciones en la base de datos.
+
+Lista los tipos, busca cuales estan libres en unas fechas, obtiene los datos
+de una en concreto y permite cambiar su estado.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"La busqueda de disponibilidad es la consulta mas usada del sistema. Le pasas
+unas fechas y te devuelve solo las habitaciones que no estan comprometidas en
+ese rango."
+"""
 from __future__ import annotations
 
 from datetime import date

@@ -1,8 +1,14 @@
-"""Excepciones propias del dominio del Hotel Aurora.
+"""QUE HACE: define los cuatro tipos de error propios del sistema.
 
-Tener excepciones propias permite que la capa web distinga un error de negocio
-(que se le muestra al usuario con un mensaje claro) de un error tecnico
-(que se registra y produce una pagina 500).
+SI PREGUNTAN POR ESTE ARCHIVO:
+"Sirven para distinguir 'la persona hizo algo que no se puede' de 'el
+programa se rompio'. Lo primero se muestra como un mensaje amable en
+pantalla; lo segundo va a la pagina de error."
+
+- ReglaNegocioError: se rompio una regla del hotel (demasiados huespedes)
+- TransicionInvalidaError: se intento un paso imposible (salida sin entrada)
+- ValorInvalidoError: un dato mal formado (numero de habitacion con letras)
+- ErrorDominio: la base de los tres, para poder atraparlos todos juntos
 """
 
 

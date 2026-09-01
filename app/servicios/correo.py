@@ -1,16 +1,17 @@
-"""Envio del comprobante de reserva por correo electronico.
+"""QUE HACE: arma y envia el comprobante de la reserva por correo.
 
-El servicio tiene dos backends intercambiables:
+Tiene dos formas de funcionar, y se elige en el archivo .env:
+  - "archivo": guarda el mensaje en una carpeta, sin salir a internet
+  - "smtp": lo envia de verdad
 
-* ``archivo``  guarda el mensaje completo en ``correos_enviados/`` sin salir a
-  la red. Es el valor por defecto: permite trabajar y demostrar el flujo sin
-  conexion, que es justo lo que hace falta el dia de la sustentacion.
-* ``smtp``     envia de verdad a traves de un servidor SMTP.
+SI PREGUNTAN POR ESTE ARCHIVO:
+"El modo archivo existe para poder trabajar y demostrar el sistema sin
+conexion. Y si el envio falla, la reserva no se pierde: se avisa que el
+comprobante no salio y se ofrece reenviarlo."
 
-La eleccion se hace en el archivo ``.env`` con ``CORREO_BACKEND``. El resto de
-la aplicacion llama siempre al mismo metodo y no sabe cual esta activo: esa es
-la razon de que el backend sea un detalle de configuracion y no un ``if``
-repartido por las vistas.
+El mensaje se manda en dos versiones, con formato y en texto plano, y el
+diseno usa tablas porque los programas de correo no entienden las formas
+modernas de maquetar.
 """
 from __future__ import annotations
 

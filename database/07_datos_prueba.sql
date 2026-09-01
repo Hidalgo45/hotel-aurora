@@ -1,3 +1,13 @@
+-- QUE HACE: llena la base con datos para poder probar el sistema.
+--
+-- Carga las 28 habitaciones del hotel, los tipos, los servicios, usuarios de
+-- ejemplo y mas de 70 reservas repartidas en varios meses.
+--
+-- SI PREGUNTAN POR ESTE ARCHIVO:
+-- "Las reservas estan repartidas en meses pasados y futuros a proposito, para
+--  que los reportes tengan algo que mostrar. Sin datos, un reporte de
+--  ocupacion sale vacio y no se puede demostrar nada."
+
 -- ============================================================================
 --  HOTEL AURORA  ·  07_datos_prueba.sql
 --  Semilla de datos: 28 habitaciones, catalogo de servicios, temporadas,

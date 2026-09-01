@@ -1,7 +1,12 @@
-"""Servicios adicionales del hotel.
+"""QUE HACE: define los extras que se pueden contratar con la reserva.
 
-Tercera demostracion de polimorfismo: dos formas de cobrar que se calculan
-con la misma llamada, costo().
+Hay dos formas de cobrar y cada una es una clase: por noche, que multiplica
+por los dias de estadia, y por unidad, que se cobra una sola vez.
+
+SI PREGUNTAN POR ESTE ARCHIVO:
+"El desayuno se cobra por cada noche; el traslado al aeropuerto, una sola
+vez. La reserva no necesita saber cual es cual: le pide el costo a cada
+servicio y cada uno responde segun su forma de cobrar."
 """
 from __future__ import annotations
 
